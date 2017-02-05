@@ -12,9 +12,10 @@ public class TapTestActivity extends AppCompatActivity {
 
     public boolean startTest = false;
     public boolean leftHandTest = true;
+    public boolean canTapScreen = true;
     public Integer leftHand = 0;
     public Integer rightHand = 0;
-    //TextView textViewToChange;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,35 +23,49 @@ public class TapTestActivity extends AppCompatActivity {
     }
 
     public void countTap(View view) {
-        final TextView textViewToChange = (TextView) findViewById(R.id.txtInstruction);
-        if(!startTest){
-            startTest = true;
-            new CountDownTimer(10000,1000){
-                public void onTick(long pie){
-                }
-                public void onFinish(){
-                    if(leftHandTest){
-                        textViewToChange.setText("get ready 4 ur other hand");
-                        leftHandTest = false;
+        if (canTapScreen) {
+            final TextView textViewToChange = (TextView) findViewById(R.id.txtInstruction);
+            if (!startTest) {
+                startTest = true;
+
+                new CountDownTimer(10000, 1000) {
+                    public void onTick(long pie) {
                     }
-                    else{
-                        textViewToChange.setText("Results: \n Left Hand: " + leftHand.toString() + "\n Right Hand: " + rightHand.toString());
+
+                    public void onFinish() {
+                        if (leftHandTest) {
+                            textViewToChange.setText("Get ready for your right hand!");
+                            canTapScreen = false;
+                            leftHandTest = false;
+
+
+                            new CountDownTimer(3000, 1000) {
+                                public void onTick(long pie) {
+                                }
+                                public void onFinish(){
+                                    canTapScreen = true;
+                                }
+                            }.start();
+
+                        } else {
+                            textViewToChange.setText("Results: \n Left Hand: " + leftHand.toString() + "\n Right Hand: " + rightHand.toString());
+                        }
+                        startTest = false;
                     }
-                    startTest = false;
-                }
 
-            }.start();
+                }.start();
 
-        }
-
-        if(startTest){
-            if(leftHandTest){
-                leftHand++;
-                textViewToChange.setText("Taps so far: " + leftHand.toString());
             }
-            else{
-                rightHand++;
-                textViewToChange.setText("Taps so far: " + rightHand.toString());
+
+            if (startTest) {
+                if (leftHandTest) {
+                    leftHand++;
+                    textViewToChange.setText("Taps so far: " + leftHand.toString());
+                } else {
+                    rightHand++;
+                    textViewToChange.setText("Taps so far: " + rightHand.toString());
+                }
+
             }
 
         }
