@@ -27,7 +27,6 @@ public class TapTestActivity extends AppCompatActivity {
             final TextView textViewToChange = (TextView) findViewById(R.id.txtInstruction);
             if (!startTest) {
                 startTest = true;
-
                 new CountDownTimer(10000, 1000) {
                     public void onTick(long pie) {
                     }
@@ -49,6 +48,7 @@ public class TapTestActivity extends AppCompatActivity {
 
                         } else {
                             textViewToChange.setText("Results: \n Left Hand: " + leftHand.toString() + "\n Right Hand: " + rightHand.toString());
+                            canTapScreen = false;
                         }
                         startTest = false;
                     }
