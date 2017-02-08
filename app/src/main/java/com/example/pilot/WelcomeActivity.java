@@ -14,9 +14,15 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
     }
 
-    /** Called when the user clicks the Send button */
+    /** Called when the user clicks the Tap Test */
     public void startTest(View view) {
         Intent intent = new Intent(this, TapTestActivity.class);
+        startActivity(intent);
+    }
+
+    /** Called when the user clicks the Spiral Test */
+    public void spiralTest(View view) {
+        Intent intent = new Intent(this, SpiralActivity.class);
         startActivity(intent);
     }
 }
