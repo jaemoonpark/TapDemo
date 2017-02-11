@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 //Using this as a guide for the drawing functionality: https://code.tutsplus.com/tutorials/android-sdk-create-a-drawing-app-touch-interaction--mobile-19202
@@ -43,5 +44,43 @@ public class SpiralView extends View {
         //According to the doc: Dithering affects how colors that are higher precision
         // than the device are down-sampled
         canvasPaint = new Paint(Paint.DITHER_FLAG);
+    }
+
+
+    //Called when SpiralView is assigned a size
+    protected void onSizeChanged(int w, int h, int oldw, int oldh){
+        super.onSizeChanged(w,h,oldw,oldh);
+
+        canvasBitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
+        drawCanvas = new Canvas(canvasBitmap);
+    }
+
+    protected void onDraw(Canvas canvas){
+        canvas.drawBitmap(canvasBitmap, 0,0, canvasPaint);
+        canvas.drawPath(tracePath, paint);
+    }
+
+    public boolean onTouchEvent(MotionEvent event){
+        float touchX = event.getX();
+        float touchY = event.getY();
+
+        //Do actions based on what they are
+        switch(event.getAction()){
+            case MotionEvent.ACTION_MOVE:
+                tracePath.lineTo(touchX,touchY);
+                break;
+            case MotionEvent.ACTION_DOWN:
+                tracePath.moveTo(touchX,touchY);
+                break;
+            case MotionEvent.ACTION_UP:
+                drawCanvas.drawPath(tracePath,paint);
+                tracePath.reset();
+                break;
+            default:
+                return false;
+        }
+
+        invalidate();
+        return true;
     }
 }
