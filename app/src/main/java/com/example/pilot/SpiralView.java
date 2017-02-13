@@ -64,14 +64,19 @@ public class SpiralView extends View {
         float touchX = event.getX();
         float touchY = event.getY();
 
-        //Do actions based on what they are
+
         switch(event.getAction()){
+            //Captures what happens when your finger MOVES across the screen
             case MotionEvent.ACTION_MOVE:
                 tracePath.lineTo(touchX,touchY);
                 break;
+
+            //Captures what happens when your finger is pressed DOWN on the screen
             case MotionEvent.ACTION_DOWN:
                 tracePath.moveTo(touchX,touchY);
                 break;
+
+            //Captures what happens when your finger is lifted UP from the screen
             case MotionEvent.ACTION_UP:
                 drawCanvas.drawPath(tracePath,paint);
                 tracePath.reset();
@@ -80,7 +85,10 @@ public class SpiralView extends View {
                 return false;
         }
 
+        //Completes the drawing
         invalidate();
+
+        
         return true;
     }
 }
