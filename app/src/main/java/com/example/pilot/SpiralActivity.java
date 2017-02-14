@@ -12,11 +12,11 @@ public class SpiralActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SpiralView draw = (SpiralView)findViewById(R.id.drawing);
-        RelativeLayout lay = new RelativeLayout(this);
+        setContentView(R.layout.activity_spiral);
 
-        lay.addView(draw);
-        setContentView(lay);
+
+
+
     }
 
 

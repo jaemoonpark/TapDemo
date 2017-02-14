@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -16,7 +17,7 @@ public class SpiralView extends View {
     protected Path tracePath;
     protected Paint paint;
     protected Paint canvasPaint;
-    protected static final int RED= 0xff0000;
+    protected static final int RED= 0xff660000;
     protected Canvas drawCanvas;
     protected Bitmap canvasBitmap;
 
@@ -38,7 +39,7 @@ public class SpiralView extends View {
         paint.setStrokeCap(Paint.Cap.ROUND);
 
         //Sets width of brush and stroke instead of fill
-        paint.setStrokeWidth(10);
+        paint.setStrokeWidth(50);
         paint.setStyle(Paint.Style.STROKE);
 
         //According to the doc: Dithering affects how colors that are higher precision
@@ -68,16 +69,19 @@ public class SpiralView extends View {
         switch(event.getAction()){
             //Captures what happens when your finger MOVES across the screen
             case MotionEvent.ACTION_MOVE:
+
                 tracePath.lineTo(touchX,touchY);
                 break;
 
             //Captures what happens when your finger is pressed DOWN on the screen
             case MotionEvent.ACTION_DOWN:
+
                 tracePath.moveTo(touchX,touchY);
                 break;
 
             //Captures what happens when your finger is lifted UP from the screen
             case MotionEvent.ACTION_UP:
+
                 drawCanvas.drawPath(tracePath,paint);
                 tracePath.reset();
                 break;
