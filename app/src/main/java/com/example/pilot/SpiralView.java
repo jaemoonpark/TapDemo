@@ -42,7 +42,7 @@ public class SpiralView extends View {
         paint.setStrokeCap(Paint.Cap.ROUND);
 
         //Sets width of brush and stroke instead of fill
-        paint.setStrokeWidth(50);
+        paint.setStrokeWidth(25);
         paint.setStyle(Paint.Style.STROKE);
 
         //According to the doc: Dithering affects how colors that are higher precision
