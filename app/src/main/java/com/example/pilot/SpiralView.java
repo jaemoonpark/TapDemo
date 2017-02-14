@@ -20,6 +20,9 @@ public class SpiralView extends View {
     protected static final int RED= 0xff660000;
     protected Canvas drawCanvas;
     protected Bitmap canvasBitmap;
+    protected long startTime = 0;
+    protected long stopTime = 0;
+    protected double time = 0.00;
 
     public SpiralView(Context context, AttributeSet attributes) {
         super(context, attributes);
@@ -77,6 +80,7 @@ public class SpiralView extends View {
             case MotionEvent.ACTION_DOWN:
 
                 tracePath.moveTo(touchX,touchY);
+                startTime = System.currentTimeMillis();
                 break;
 
             //Captures what happens when your finger is lifted UP from the screen
@@ -84,6 +88,10 @@ public class SpiralView extends View {
 
                 drawCanvas.drawPath(tracePath,paint);
                 tracePath.reset();
+                stopTime = System.currentTimeMillis();
+                time = (stopTime - startTime);
+                time = time /1000;
+                Log.v("myTime",Double.toString(time) + "Seconds");
                 break;
             default:
                 return false;
