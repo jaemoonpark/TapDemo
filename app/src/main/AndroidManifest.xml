@@ -17,6 +17,7 @@
         </activity>
         <activity android:name=".TapTestActivity" />
         <activity android:name=".SpiralActivity"></activity>
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     </application>
 
 </manifest>
