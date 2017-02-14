@@ -26,6 +26,9 @@ public class SpiralView extends View {
     protected static final int RED= 0xff660000;
     protected Canvas drawCanvas;
     protected Bitmap canvasBitmap;
+    protected long startTime = 0;
+    protected long stopTime = 0;
+    protected double time = 0.00;
 
     public SpiralView(Context context, AttributeSet attributes) {
         super(context, attributes);
@@ -45,7 +48,7 @@ public class SpiralView extends View {
         paint.setStrokeCap(Paint.Cap.ROUND);
 
         //Sets width of brush and stroke instead of fill
-        paint.setStrokeWidth(50);
+        paint.setStrokeWidth(25);
         paint.setStyle(Paint.Style.STROKE);
 
         //According to the doc: Dithering affects how colors that are higher precision
@@ -83,6 +86,7 @@ public class SpiralView extends View {
             case MotionEvent.ACTION_DOWN:
 
                 tracePath.moveTo(touchX,touchY);
+                startTime = System.currentTimeMillis();
                 break;
 
             //Captures what happens when your finger is lifted UP from the screen
@@ -90,8 +94,6 @@ public class SpiralView extends View {
 
                 drawCanvas.drawPath(tracePath,paint);
                 tracePath.reset();
-
-
                 //asking for permission to save
                 //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 //saving screen here
@@ -116,7 +118,10 @@ public class SpiralView extends View {
                     System.out.println("something went wrong :(");
                     exception.printStackTrace();
                 }
-
+                stopTime = System.currentTimeMillis();
+                time = (stopTime - startTime);
+                time = time /1000;
+                Log.v("myTime",Double.toString(time) + "Seconds");
                 break;
             default:
                 return false;
