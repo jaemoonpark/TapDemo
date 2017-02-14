@@ -16,6 +16,7 @@ public class SpiralActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiral);
         textViewObj = (TextView) findViewById(R.id.timerView);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
     }
 

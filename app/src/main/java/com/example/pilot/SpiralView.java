@@ -101,9 +101,9 @@ public class SpiralView extends View {
                 View spiralView = findViewById(R.id.drawing);
                 spiralView.setDrawingCacheEnabled(true);
                 Bitmap spiralViewBitMap = spiralView.getDrawingCache();
-                File postSpiralImageFile = new File(Environment.getExternalStorageDirectory() + "/test/");
+                File postSpiralImageFile = new File(Environment.getExternalStorageDirectory() + "/spiral/");
                 postSpiralImageFile.mkdirs();
-                File file = new File(postSpiralImageFile, "spiral.png");
+                File file = new File(postSpiralImageFile, "spiral" + Long.toString(System.currentTimeMillis()) + ".png");
 
                 //creating new file here
                 try
