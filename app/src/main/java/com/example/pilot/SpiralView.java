@@ -101,15 +101,17 @@ public class SpiralView extends View {
                 View spiralView = findViewById(R.id.drawing);
                 spiralView.setDrawingCacheEnabled(true);
                 Bitmap spiralViewBitMap = spiralView.getDrawingCache();
-                File postSpiralImageFile = new File(Environment.getExternalStorageDirectory() + "/test.png");
+                File postSpiralImageFile = new File(Environment.getExternalStorageDirectory() + "/test/");
+                postSpiralImageFile.mkdirs();
+                File file = new File(postSpiralImageFile, "spiral.png");
 
                 //creating new file here
                 try
                 {
                     //mayble add file.newfile?
                     //starting output stream using spiral image file
-                    postSpiralImageFile.createNewFile();
-                    FileOutputStream outputStream = new FileOutputStream(postSpiralImageFile);
+                    //postSpiralImageFile.createNewFile();
+                    FileOutputStream outputStream = new FileOutputStream(file);
                     spiralViewBitMap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
                     outputStream.close();
                     System.out.println("did work?");
