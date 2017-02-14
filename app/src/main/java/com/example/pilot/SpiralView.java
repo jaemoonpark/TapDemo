@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -91,7 +92,6 @@ public class SpiralView extends View {
 
             //Captures what happens when your finger is lifted UP from the screen
             case MotionEvent.ACTION_UP:
-
                 drawCanvas.drawPath(tracePath,paint);
                 tracePath.reset();
                 //asking for permission to save
@@ -121,6 +121,7 @@ public class SpiralView extends View {
                 stopTime = System.currentTimeMillis();
                 time = (stopTime - startTime);
                 time = time /1000;
+                SpiralActivity.textViewObj.setText(Double.toString(time) + " Seconds");
                 Log.v("myTime",Double.toString(time) + "Seconds");
                 break;
             default:
