@@ -1,14 +1,20 @@
 package com.example.pilot;
 
+import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 //Using this as a guide for the drawing functionality: https://code.tutsplus.com/tutorials/android-sdk-create-a-drawing-app-touch-interaction--mobile-19202
 
@@ -84,6 +90,33 @@ public class SpiralView extends View {
 
                 drawCanvas.drawPath(tracePath,paint);
                 tracePath.reset();
+
+
+                //asking for permission to save
+                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                //saving screen here
+                //loading view
+                View spiralView = findViewById(R.id.drawing);
+                spiralView.setDrawingCacheEnabled(true);
+                Bitmap spiralViewBitMap = spiralView.getDrawingCache();
+                File postSpiralImageFile = new File(Environment.getExternalStorageDirectory() + "/test.png");
+
+                //creating new file here
+                try
+                {
+                    //mayble add file.newfile?
+                    //starting output stream using spiral image file
+                    postSpiralImageFile.createNewFile();
+                    FileOutputStream outputStream = new FileOutputStream(postSpiralImageFile);
+                    spiralViewBitMap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                    outputStream.close();
+                    System.out.println("did work?");
+                }
+                catch (Throwable exception){
+                    System.out.println("something went wrong :(");
+                    exception.printStackTrace();
+                }
+
                 break;
             default:
                 return false;
