@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -105,10 +106,11 @@ public class SpiralView extends View {
                 postSpiralImageFile.mkdirs();
                 File file = new File(postSpiralImageFile, "spiral" + Long.toString(System.currentTimeMillis()) + ".png");
 
+                //this line of code simply saves directly to gallery
+                MediaStore.Images.Media.insertImage(getContext().getContentResolver(), spiralViewBitMap,"spiral" + Long.toString(System.currentTimeMillis()) + ".png", "after spiral draw test");
                 //creating new file here
                 try
                 {
-                    //mayble add file.newfile?
                     //starting output stream using spiral image file
                     //postSpiralImageFile.createNewFile();
                     FileOutputStream outputStream = new FileOutputStream(file);
