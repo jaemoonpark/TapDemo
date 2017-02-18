@@ -25,4 +25,10 @@ public class WelcomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SpiralActivity.class);
         startActivity(intent);
     }
+
+    /** Called when the user clicks the Leveler button */
+    public void levelTest(View view) {
+        Intent intent = new Intent(this, LevelActivity.class);
+        startActivity(intent);
+    }
 }
