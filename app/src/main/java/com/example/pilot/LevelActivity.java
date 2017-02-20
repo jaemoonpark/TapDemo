@@ -33,8 +33,10 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         // Many sensors return 3 values, one for each axis.
         float xAxis = event.values[0];
         float yAxis = event.values[1];
-        System.out.println("x axis: " + xAxis);
-        System.out.println("y axis: " + yAxis);
+        //negative indicates tilting right, positive indicates tilting left
+        System.out.println("x axis (horizontal): " + xAxis);
+        //negative indicates tilting updwards, postive indicates tilting downwards
+        System.out.println("y axis (vertical): " + yAxis);
         // Do something with this sensor value.
     }
 
