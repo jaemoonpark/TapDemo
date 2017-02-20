@@ -12,15 +12,14 @@ import android.os.Bundle;
 /* Learning how to gather sensor data that senses movement of device */
 public class LevelActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager mSensorManager;
-    private Sensor mLight;
+    private Sensor mSensor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level);
-
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mLight = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
     @Override
@@ -32,14 +31,17 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     public final void onSensorChanged(SensorEvent event) {
         // The light sensor returns a single value.
         // Many sensors return 3 values, one for each axis.
-        float lux = event.values[0];
+        float xAxis = event.values[0];
+        float yAxis = event.values[1];
+        System.out.println("x axis: " + xAxis);
+        System.out.println("y axis: " + yAxis);
         // Do something with this sensor value.
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
     }
 
     @Override
