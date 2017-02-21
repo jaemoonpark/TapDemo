@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import java.lang.Math;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -21,6 +22,11 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     private float xDraw;
     private float yDraw;
     private boolean testStarted = false;
+    private float Athreshold;
+    private float Bthreshold;
+    private float Cthreshold;
+    private float Dthreshold;
+    private String score;
     public BullseyeDrawView bullseyeView;
     private ArrayList<Double> distancesArray = new ArrayList<Double>();
 
@@ -31,6 +37,10 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         bullseyeView = (BullseyeDrawView) findViewById(R.id.bullseyedrawing);
+        Athreshold = bullseyeView.getWidth() / 16;
+        Bthreshold = bullseyeView.getWidth() / 8;
+        Cthreshold = bullseyeView.getWidth() / 4;
+        Dthreshold = bullseyeView.getWidth() / 2;
     }
 
     @Override
@@ -61,20 +71,12 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     }
 
 
-    private final double getD(float x, float y){
-        float squareX = x * x;
-        float squareY = y + y;
-        float sum = squareX + squareY;
-        Float f = sum;
-        Double dubSum = new Double(f.toString());
-        return Math.sqrt(dubSum);
-    }
 
     private double getDistanceFromCenter(float x, float y){
         double xTemp = (double) x;
         double yTemp = (double) y;
         double xCenter = (bullseyeView.getX() + bullseyeView.getWidth()) / 2;
-        double yCenter = (bullseyeView.getY() + bullseyeView.getHeight()) / 2);
+        double yCenter = (bullseyeView.getY() + bullseyeView.getHeight()) / 2;
         return Math.sqrt(Math.pow(xCenter - xTemp,2) + Math.pow(yCenter - yTemp,2));
     }
 
@@ -91,19 +93,45 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         mSensorManager.unregisterListener(this);
     }
 
+    private String getScore(ArrayList<Double> distancesArray){
+        double sum = 0;
+        for(int i = 0; i < distancesArray.size(); i++){
+            sum += distancesArray.get(i);
+        }
+        double avg = sum/distancesArray.size();
+        if(avg > Dthreshold){
+            return "F";
+        }
+        else if(avg > Cthreshold && avg <= Dthreshold){
+            return "D";
+        }
+        else if(avg > Bthreshold && avg <= Cthreshold){
+            return "C";
+        }
+        else if(avg > Athreshold && avg <= Bthreshold){
+            return "B";
+        }
+        else{
+            return "A";
+        }
+    }
+
     public void startBullseyeTest(View view){
         if(!testStarted){
             testStarted = true;
             new CountDownTimer(10000, 500){
                 @Override
                 public void onTick(long millisUntilFinished){
-                    double distance = getD(xDraw, yDraw);
+                    double distance = getDistanceFromCenter(xDraw, yDraw);
+                    distancesArray.add(distance);
 
                 }
 
                 @Override
                 public void onFinish() {
                     testStarted = false;
+                    System.out.println(getScore(distancesArray));
+
                 }
             }.start();
         }
