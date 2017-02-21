@@ -65,6 +65,7 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
             //       System.out.println("xdraw: " + xDraw + " y draw: " + yDraw);
             //       bullseyeView.tracePath.moveTo(xDraw,yDraw);
             System.out.println("x axis: " + xAxis + " y axis: " + yAxis);
+            bullseyeView.tracePath.moveTo(xDraw,yDraw);
             bullseyeView.tracePath.lineTo(xDraw, yDraw);
             bullseyeView.invalidate();
         }
