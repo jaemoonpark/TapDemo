@@ -6,9 +6,12 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import java.lang.Math;
+import java.util.ArrayList;
 
 
 /* Learning how to gather sensor data that senses movement of device */
@@ -19,6 +22,8 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     private float yDraw;
     private boolean testStarted = false;
     public BullseyeDrawView bullseyeView;
+    private ArrayList<Double> distancesArray = new ArrayList<Double>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +60,16 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         }
     }
 
+
+    private final double getD(float x, float y){
+        float squareX = x * x;
+        float squareY = y + y;
+        float sum = squareX + squareY;
+        Float f = sum;
+        Double dubSum = new Double(f.toString());
+        return Math.sqrt(dubSum);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -71,7 +86,20 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     public void startBullseyeTest(View view){
         if(!testStarted){
             testStarted = true;
+            new CountDownTimer(10000, 500){
+                @Override
+                public void onTick(long millisUntilFinished){
+                   double distance = getD(xDraw, yDraw);
+
+                }
+
+                @Override
+                public void onFinish() {
+                    testStarted = false;
+                }
+            }.start();
         }
+
     }
 }
 
