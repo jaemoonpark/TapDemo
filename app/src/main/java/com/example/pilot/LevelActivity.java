@@ -37,10 +37,10 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         bullseyeView = (BullseyeDrawView) findViewById(R.id.bullseyedrawing);
-        Athreshold = bullseyeView.getWidth() / 16;
-        Bthreshold = bullseyeView.getWidth() / 8;
-        Cthreshold = bullseyeView.getWidth() / 4;
-        Dthreshold = bullseyeView.getWidth() / 2;
+        Athreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 16;
+        Bthreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 8;
+        Cthreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 4;
+        Dthreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
     }
 
     @Override
