@@ -70,6 +70,14 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         return Math.sqrt(dubSum);
     }
 
+    private double getDistanceFromCenter(float x, float y){
+        double xTemp = (double) x;
+        double yTemp = (double) y;
+        double xCenter = (bullseyeView.getX() + bullseyeView.getWidth()) / 2;
+        double yCenter = (bullseyeView.getY() + bullseyeView.getHeight()) / 2);
+        return Math.sqrt(Math.pow(xCenter - xTemp,2) + Math.pow(yCenter - yTemp,2));
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -89,7 +97,7 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
             new CountDownTimer(10000, 500){
                 @Override
                 public void onTick(long millisUntilFinished){
-                   double distance = getD(xDraw, yDraw);
+                    double distance = getD(xDraw, yDraw);
 
                 }
 
