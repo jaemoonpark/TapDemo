@@ -46,6 +46,7 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         Dthreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
         scoreView = (TextView) findViewById(R.id.textView3);
         scoreView.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -70,7 +71,9 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
             //       System.out.println("xdraw: " + xDraw + " y draw: " + yDraw);
             //       bullseyeView.tracePath.moveTo(xDraw,yDraw);
             System.out.println("x axis: " + xAxis + " y axis: " + yAxis);
-            bullseyeView.tracePath.moveTo(xDraw,yDraw);
+
+
+//            bullseyeView.tracePath.moveTo(xDraw,yDraw);
             bullseyeView.tracePath.lineTo(xDraw, yDraw);
             bullseyeView.invalidate();
         }
