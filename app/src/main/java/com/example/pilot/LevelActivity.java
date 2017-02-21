@@ -1,6 +1,7 @@
 package com.example.pilot;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,13 +14,16 @@ import android.os.Bundle;
 public class LevelActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mSensor;
-
+    private int xDraw;
+    private int yDraw;
+    public BullseyeDrawView bullseyeView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        bullseyeView = (BullseyeDrawView) findViewById(R.id.bullseyedrawing);
     }
 
     @Override
@@ -33,6 +37,14 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         // Many sensors return 3 values, one for each axis.
         float xAxis = event.values[0];
         float yAxis = event.values[1];
+
+        //setting x draw coordinate
+        xDraw = (((int) bullseyeView.getX() + bullseyeView.getWidth()) / 2);
+
+        //setting y draw coordinate
+        yDraw = (((int) bullseyeView.getY() + bullseyeView.getHeight()) / 2);
+
+        bullseyeView.tracePath.lineTo(xDraw,yDraw);
         //negative indicates tilting right, positive indicates tilting left
         System.out.println("x axis (horizontal): " + xAxis);
         //negative indicates tilting updwards, postive indicates tilting downwards
