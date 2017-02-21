@@ -86,7 +86,6 @@ public class SpiralView extends View {
 
             //Captures what happens when your finger is pressed DOWN on the screen
             case MotionEvent.ACTION_DOWN:
-
                 tracePath.moveTo(touchX,touchY);
                 startTime = System.currentTimeMillis();
                 break;

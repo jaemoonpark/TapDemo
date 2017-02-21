@@ -66,6 +66,7 @@ public class BullseyeDrawView extends View {
     }
 
     protected void onDraw(Canvas canvas){
+        System.out.println("this shit is being invoked");
         canvas.drawBitmap(canvasBitmap, 0,0, canvasPaint);
         canvas.drawPath(tracePath, paint);
     }

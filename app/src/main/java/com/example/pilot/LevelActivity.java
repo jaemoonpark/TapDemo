@@ -14,8 +14,8 @@ import android.os.Bundle;
 public class LevelActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mSensor;
-    private int xDraw;
-    private int yDraw;
+    private float xDraw;
+    private float yDraw;
     public BullseyeDrawView bullseyeView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +39,15 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         float yAxis = event.values[1];
 
         //setting x draw coordinate
-        xDraw = (((int) bullseyeView.getX() + bullseyeView.getWidth()) / 2);
+        xDraw = ((bullseyeView.getX() + bullseyeView.getWidth()) / 2) + (-xAxis * 10);
 
         //setting y draw coordinate
-        yDraw = (((int) bullseyeView.getY() + bullseyeView.getHeight()) / 2);
+        yDraw = ((bullseyeView.getY() + bullseyeView.getHeight()) / 2) + (-yAxis * 10);
 
+        System.out.println("xdraw: " + xDraw + " y draw: " + yDraw);
+ //       bullseyeView.tracePath.moveTo(xDraw,yDraw);
         bullseyeView.tracePath.lineTo(xDraw,yDraw);
-        //negative indicates tilting right, positive indicates tilting left
-        System.out.println("x axis (horizontal): " + xAxis);
-        //negative indicates tilting updwards, postive indicates tilting downwards
-        System.out.println("y axis (vertical): " + yAxis);
-        // Do something with this sensor value.
+        bullseyeView.invalidate();
     }
 
     @Override
