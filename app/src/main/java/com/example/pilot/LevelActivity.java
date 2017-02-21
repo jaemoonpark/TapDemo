@@ -10,6 +10,8 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+
 import java.lang.Math;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     private String score;
     public BullseyeDrawView bullseyeView;
     private ArrayList<Double> distancesArray = new ArrayList<Double>();
+    private TextView scoreView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,8 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         Bthreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 8;
         Cthreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 4;
         Dthreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
+        scoreView = (TextView) findViewById(R.id.textView3);
+        scoreView.setVisibility(View.GONE);
     }
 
     @Override
@@ -131,7 +136,10 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
                 @Override
                 public void onFinish() {
                     testStarted = false;
-                    System.out.println(getScore(distancesArray));
+                    String finishScore = getScore(distancesArray);
+                    System.out.println(finishScore);
+                    scoreView.setText("Score: " + finishScore);
+                    scoreView.setVisibility(View.VISIBLE);
 
                 }
             }.start();
