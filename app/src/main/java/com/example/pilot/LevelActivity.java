@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 
 /* Learning how to gather sensor data that senses movement of device */
@@ -16,6 +17,7 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     private Sensor mSensor;
     private float xDraw;
     private float yDraw;
+    private boolean testStarted = false;
     public BullseyeDrawView bullseyeView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +37,22 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     public final void onSensorChanged(SensorEvent event) {
         // The light sensor returns a single value.
         // Many sensors return 3 values, one for each axis.
-        float xAxis = event.values[0];
-        float yAxis = event.values[1];
+        if(testStarted) {
+            float xAxis = event.values[0];
+            float yAxis = event.values[1];
 
-        //setting x draw coordinate
-        xDraw = ((bullseyeView.getX() + bullseyeView.getWidth()) / 2) + (-xAxis * 10);
+            //setting x draw coordinate
+            xDraw = ((bullseyeView.getX() + bullseyeView.getWidth()) / 2) + (-xAxis * (Resources.getSystem().getDisplayMetrics().widthPixels / 15));
 
-        //setting y draw coordinate
-        yDraw = ((bullseyeView.getY() + bullseyeView.getHeight()) / 2) + (-yAxis * 10);
+            //setting y draw coordinate
+            yDraw = ((bullseyeView.getY() + bullseyeView.getHeight()) / 2) + (yAxis * (Resources.getSystem().getDisplayMetrics().heightPixels / 15));
 
-        System.out.println("xdraw: " + xDraw + " y draw: " + yDraw);
- //       bullseyeView.tracePath.moveTo(xDraw,yDraw);
-        bullseyeView.tracePath.lineTo(xDraw,yDraw);
-        bullseyeView.invalidate();
+            //       System.out.println("xdraw: " + xDraw + " y draw: " + yDraw);
+            //       bullseyeView.tracePath.moveTo(xDraw,yDraw);
+            System.out.println("x axis: " + xAxis + " y axis: " + yAxis);
+            bullseyeView.tracePath.lineTo(xDraw, yDraw);
+            bullseyeView.invalidate();
+        }
     }
 
     @Override
@@ -56,10 +61,17 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
     }
 
+
     @Override
     protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
+    }
+
+    public void startBullseyeTest(View view){
+        if(!testStarted){
+            testStarted = true;
+        }
     }
 }
 
