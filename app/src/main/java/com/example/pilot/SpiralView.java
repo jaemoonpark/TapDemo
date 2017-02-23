@@ -15,8 +15,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+
+import javax.xml.xpath.XPath;
 
 //Using this as a guide for the drawing functionality: https://code.tutsplus.com/tutorials/android-sdk-create-a-drawing-app-touch-interaction--mobile-19202
 
@@ -31,6 +35,8 @@ public class SpiralView extends View {
     protected long startTime = 0;
     protected long stopTime = 0;
     protected double time = 0.00;
+    protected ArrayList<Float> xPath = new ArrayList<Float>();
+    protected ArrayList<Float> yPath = new ArrayList<Float>();
 
     public SpiralView(Context context, AttributeSet attributes) {
         super(context, attributes);
@@ -82,12 +88,16 @@ public class SpiralView extends View {
             case MotionEvent.ACTION_MOVE:
 
                 tracePath.lineTo(touchX,touchY);
+                xPath.add(touchX);
+                yPath.add(touchY);
                 break;
 
             //Captures what happens when your finger is pressed DOWN on the screen
             case MotionEvent.ACTION_DOWN:
                 tracePath.moveTo(touchX,touchY);
                 startTime = System.currentTimeMillis();
+                xPath.add(touchX);
+                yPath.add(touchY);
                 break;
 
             //Captures what happens when your finger is lifted UP from the screen
@@ -126,15 +136,25 @@ public class SpiralView extends View {
                 time = time /1000;
                 SpiralActivity.textViewObj.setText(Double.toString(time) + " Seconds");
                 Log.v("myTime",Double.toString(time) + "Seconds");
+                scoreSpiral();
                 break;
-            default:
+                default:
                 return false;
         }
 
         //Completes the drawing
         invalidate();
 
-        
         return true;
     }
+
+    public void scoreSpiral(){
+        int i = xPath.size();
+        Log.v("myTime","number of locations " + Integer.toString(i));
+        //in here we will see how close each location is to wher the spiral formula should put it
+       // for (int v = 0;v < i;v++){
+
+       // }
+    }
+
 }
