@@ -43,6 +43,40 @@ public class SpiralView extends View {
         drawPrep();
     }
 
+    protected void createSpiral(){
+        //creates model spiral, we will use the same equation to score
+        double whole = 13.8;
+        double seg = (whole * Math.PI)/100;
+        double t = 0.0;
+        int x;
+        int y;
+        double a = 1;
+        double b = .15;
+        int horizontalMovement = 600;
+        int verticalMovement = 800;
+        tracePath.moveTo(horizontalMovement,verticalMovement);
+        for (int i = 0;i < 100;i++){
+            t = i * seg;
+            x = spiralXValues(a,b,t);
+            y = spiralYValues(a,b,t);
+            tracePath.lineTo(x + horizontalMovement,y + verticalMovement);
+        }
+        drawCanvas.drawPath(tracePath,paint);
+        tracePath.reset();
+    }
+
+    //Calculates x values of spiral
+    public int spiralXValues(double a, double b, double t){
+        Double hold = (a * (Math.pow(Math.E,(b * t))) * Math.cos(t));
+        return hold.intValue();
+    }
+
+    //calculates y values of spiral
+    public int spiralYValues(double a, double b, double t){
+        Double hold = (a * (Math.pow(Math.E,(b * t))) * Math.sin(t));
+        return hold.intValue();
+    }
+
     protected void drawPrep(){
         //Create new path that will follow the finger as it traces the spiral
         tracePath = new Path();
@@ -71,6 +105,7 @@ public class SpiralView extends View {
 
         canvasBitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
         drawCanvas = new Canvas(canvasBitmap);
+        createSpiral();
     }
 
     protected void onDraw(Canvas canvas){
