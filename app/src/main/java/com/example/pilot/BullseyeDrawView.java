@@ -80,10 +80,10 @@ public class BullseyeDrawView extends View {
         canvas.drawBitmap(canvasBitmap, 0,0, canvasPaint);
 
         // resets the path to middle to remove weird intialization bug
-//        double x = getWidth() / 2;
-//        double y = getHeight() / 2;
-//
-//        tracePath.moveTo((float) x, (float) y);
+        double x = getWidth() / 2;
+        double y = getHeight() / 2;
+
+        tracePath.moveTo((float) x, (float) y);
 
 
         canvas.drawPath(tracePath, paint);
