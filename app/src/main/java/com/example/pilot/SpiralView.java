@@ -1,6 +1,5 @@
 package com.example.pilot;
 
-import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,19 +7,13 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
-
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-
-import javax.xml.xpath.XPath;
 
 //Using this as a guide for the drawing functionality: https://code.tutsplus.com/tutorials/android-sdk-create-a-drawing-app-touch-interaction--mobile-19202
 
