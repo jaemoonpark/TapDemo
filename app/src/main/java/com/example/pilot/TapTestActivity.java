@@ -19,6 +19,7 @@ public class TapTestActivity extends AppCompatActivity {
     public Integer rightHand = 0;
     public Integer timeCount = 10;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,13 @@ public class TapTestActivity extends AppCompatActivity {
                             }.start();
 
                         } else {
+                            int rightHandScore = getScore("Right");
+                            int leftHandScore = getScore("Left");
+                            int averageScore  = getScore("Average");
+
+                            System.out.println("Right Hand Score : " + rightHandScore);
+                            System.out.println("Left Hand Score : " + leftHandScore);
+                            System.out.println("Average Hand Score : " + averageScore);
                             textViewToChange.setText("Results: \n Left Hand: " + leftHand.toString() + "\n Right Hand: " + rightHand.toString());
                             textViewToChange2.setText("Done");
                             canTapScreen = false;
@@ -78,5 +86,48 @@ public class TapTestActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    public int getScore(String type) {
+        if (type.equals("Right")) {
+            if(rightHand <= 20) {
+                return 1;
+            } else if (20 < rightHand && rightHand < 30) {
+                return 2;
+            } else if (30 < rightHand && rightHand < 40) {
+                return 3;
+            } else if (40 < rightHand && rightHand < 50) {
+                return 4;
+            } else if (rightHand > 50) {
+                return 5;
+            }
+        } else if (type.equals("Left")) {
+            if(leftHand <= 20) {
+                return 1;
+            } else if (20 < leftHand && leftHand < 30) {
+                return 2;
+            } else if (30 < leftHand && leftHand < 40) {
+                return 3;
+            } else if (40 < leftHand && leftHand < 50) {
+                return 4;
+            } else if (leftHand > 50) {
+                return 5;
+            }
+        } else if (type.equals("Average")) {
+            int avg = (leftHand + rightHand) / 2;
+
+            if(avg <= 20) {
+                return 1;
+            } else if (20 < avg && avg < 30) {
+                return 2;
+            } else if (30 < avg && avg < 40) {
+                return 3;
+            } else if (40 < avg && avg < 50) {
+                return 4;
+            } else if (avg > 50) {
+                return 5;
+            }
+        }
+        return -1;
     }
 }
