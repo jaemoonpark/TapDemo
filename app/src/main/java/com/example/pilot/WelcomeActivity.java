@@ -31,4 +31,9 @@ public class WelcomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LevelActivity.class);
         startActivity(intent);
     }
+
+    public void bubbleTest(View view){
+        Intent intent = new Intent(this, BubbleActivity.class);
+        startActivity(intent);
+    }
 }

@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".TapTestActivity" />
         <activity android:name=".SpiralActivity" />
-        <activity android:name=".LevelActivity"></activity>
+        <activity android:name=".LevelActivity" />
+        <activity android:name=".BubbleActivity"></activity>
     </application>
 
 </manifest>
