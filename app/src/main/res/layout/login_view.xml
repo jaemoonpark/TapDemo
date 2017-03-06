@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#363636">
+
+    <TextView
+        android:text="Enter your username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFF"
+        android:id="@+id/usernamePrompt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:fontFamily="sans-serif"
+        android:layout_alignParentTop="true"
+        android:gravity="left"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textColor="#FFF"
+        android:layout_below="@+id/usernamePrompt"
+        android:ems="10"
+        android:id="@+id/username" />
+
+    <TextView
+        android:text="Age?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFF"
+        android:id="@+id/agePrompt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:fontFamily="sans-serif"
+        android:layout_alignParentTop="true"
+        android:gravity="left"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textColor="#FFF"
+        android:ems="10"
+        android:layout_below="@+id/agePrompt"
+        android:id="@+id/age" />
+
+    <TextView
+        android:text="Sex?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFF"
+        android:id="@+id/sexPrompt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:fontFamily="sans-serif"
+        android:layout_alignParentTop="true"
+        android:gravity="left"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:textColor="#FFF"
+        android:ems="10"
+        android:layout_below="@+id/sexPrompt"
+        android:id="@+id/sex" />
+
+    <TextView
+        android:text="Dominant Hand?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFF"
+        android:id="@+id/handDominancePrompt"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:fontFamily="sans-serif"
+        android:layout_alignParentTop="true"
+        android:gravity="left"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:textColor="#FFF"
+        android:ems="10"
+        android:layout_below="@+id/handDominancePrompt"
+        android:id="@+id/dominantHand" />
+
+    <Button
+        android:text="Done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button4"
+        android:onClick="onComplete"/>
+
+
+    <!--
+
+    Spinners seem a little more complicated than I imagined throwing it in the xml file..
+    will be a good feature to have later in the development stage
+
+     <Spinner
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/SexDropDown" />
+
+     <Spinner
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/DominantHandDropDown" />
+
+         -->
+
+</LinearLayout>

@@ -31,4 +31,12 @@
         android:textSize="50sp"
         android:textAlignment="center" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/tapTestComplete"
+        android:text="done"
+        android:onClick="bringMeHome"
+        android:visibility="gone"/>
+
 </RelativeLayout>

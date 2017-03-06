@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Tap Test"
-        android:onClick="startTest"
+        android:onClick="tapTest"
         android:layout_marginTop="59dp"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:layout_below="@+id/textView2"

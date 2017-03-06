@@ -7,8 +7,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class TapTestActivity extends AppCompatActivity {
 
@@ -19,16 +22,26 @@ public class TapTestActivity extends AppCompatActivity {
     public Integer rightHand = 0;
     public Integer timeCount = 10;
 
+    Bundle currUser;
+    ArrayList<Integer> tapTestResults;
+    String dominance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tap_test);
+
+        Intent in = getIntent();
+        currUser = in.getExtras();
+        tapTestResults = currUser.getIntegerArrayList(currUser.getString("username"));
+        dominance = currUser.getString(currUser.getString("username")+"dominantHand");
     }
 
     public void countTap(View view) {
         if (canTapScreen) {
             final TextView textViewToChange = (TextView) findViewById(R.id.txtInstruction);
             final TextView textViewToChange2 = (TextView) findViewById(R.id.txtTime);
+            final Button btn = (Button) findViewById(R.id.tapTestComplete);
             if (!startTest) {
                 startTest = true;
                 new CountDownTimer(10000, 1000) {
@@ -57,6 +70,7 @@ public class TapTestActivity extends AppCompatActivity {
                         } else {
                             textViewToChange.setText("Results: \n Left Hand: " + leftHand.toString() + "\n Right Hand: " + rightHand.toString());
                             textViewToChange2.setText("Done");
+                            btn.setVisibility(View.VISIBLE);
                             canTapScreen = false;
                         }
                         startTest = false;
@@ -78,5 +92,22 @@ public class TapTestActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    public void bringMeHome(){
+        tapTestResults.add(leftHand);
+        tapTestResults.add(rightHand);
+        currUser.putIntegerArrayList(currUser.getString("username")+"Tap Test Results", tapTestResults);
+
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        intent.putExtras(currUser);
+
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBundle(currUser.getString("username"), currUser);
+        super.onSaveInstanceState(savedInstanceState);
     }
 }
