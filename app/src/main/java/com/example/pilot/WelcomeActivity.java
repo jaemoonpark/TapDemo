@@ -59,4 +59,9 @@ public class WelcomeActivity extends AppCompatActivity {
         savedInstanceState.putBundle(currUser.getString("username"), currUser);
         super.onSaveInstanceState(savedInstanceState);
     }
+
+    public void bubbleTest(View view){
+        Intent intent = new Intent(this, BubbleActivity.class);
+        startActivity(intent);
+    }
 }

@@ -1,6 +1,5 @@
 package com.example.pilot;
 
-import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,35 +7,37 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
-
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 
-import javax.xml.xpath.XPath;
-
 //Using this as a guide for the drawing functionality: https://code.tutsplus.com/tutorials/android-sdk-create-a-drawing-app-touch-interaction--mobile-19202
 
 public class SpiralView extends View {
-
+    //drawing tool
     protected Path tracePath;
     protected Paint paint;
     protected Paint canvasPaint;
     protected static final int RED= 0xff660000;
+    protected static final int BLUE= 0xff8DEEEE;
     protected Canvas drawCanvas;
     protected Bitmap canvasBitmap;
+    protected ArrayList<Float> xPath = new ArrayList<Float>();
+    protected ArrayList<Float> yPath = new ArrayList<Float>();
+    //timer
     protected long startTime = 0;
     protected long stopTime = 0;
     protected double time = 0.00;
-    protected ArrayList<Float> xPath = new ArrayList<Float>();
-    protected ArrayList<Float> yPath = new ArrayList<Float>();
+    //constants of spiral
+    protected double whole = 13.8;
+    protected double a = 1;
+    protected double b = .15;
+    protected int horizontalMovement = 600;
+    protected int verticalMovement = 800;
 
     public SpiralView(Context context, AttributeSet attributes) {
         super(context, attributes);
@@ -45,15 +46,10 @@ public class SpiralView extends View {
 
     protected void createSpiral(){
         //creates model spiral, we will use the same equation to score
-        double whole = 13.8;
         double seg = (whole * Math.PI)/100;
         double t = 0.0;
         int x;
         int y;
-        double a = 1;
-        double b = .15;
-        int horizontalMovement = 600;
-        int verticalMovement = 800;
         tracePath.moveTo(horizontalMovement,verticalMovement);
         for (int i = 0;i < 100;i++){
             t = i * seg;
@@ -90,7 +86,7 @@ public class SpiralView extends View {
         paint.setStrokeCap(Paint.Cap.ROUND);
 
         //Sets width of brush and stroke instead of fill
-        paint.setStrokeWidth(25);
+        paint.setStrokeWidth(50);
         paint.setStyle(Paint.Style.STROKE);
 
         //According to the doc: Dithering affects how colors that are higher precision
@@ -106,6 +102,8 @@ public class SpiralView extends View {
         canvasBitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
         drawCanvas = new Canvas(canvasBitmap);
         createSpiral();
+        paint.setColor(BLUE);
+        paint.setStrokeWidth(25);
     }
 
     protected void onDraw(Canvas canvas){
@@ -171,9 +169,9 @@ public class SpiralView extends View {
                 time = time /1000;
                 SpiralActivity.textViewObj.setText(Double.toString(time) + " Seconds");
                 Log.v("myTime",Double.toString(time) + "Seconds");
-                scoreSpiral();
+                int score = scoreSpiral();
                 break;
-                default:
+            default:
                 return false;
         }
 
@@ -183,13 +181,28 @@ public class SpiralView extends View {
         return true;
     }
 
-    public void scoreSpiral(){
-        int i = xPath.size();
-        Log.v("myTime","number of locations " + Integer.toString(i));
-        //in here we will see how close each location is to wher the spiral formula should put it
-       // for (int v = 0;v < i;v++){
-
-       // }
+    public int scoreSpiral(){
+        int size = xPath.size();
+        double seg = (whole * Math.PI)/size;
+        double t = 0.0;
+        int actualX;
+        int actualY;
+        float theirX;
+        float theirY;
+        float sum = 0;
+        //in here we will see how close each location is to where the spiral formula should put it
+        for (int i = 0;i < size;i++){
+            t = i * seg;
+            actualX = spiralXValues(a,b,t) + horizontalMovement;
+            actualY = spiralYValues(a,b,t) + verticalMovement;
+            theirX = xPath.get(size - i - 1);
+            theirY = yPath.get(size - i - 1);
+            //Log.v("example",Float.toString(actualX) + " " + Float.toString(theirX));
+            sum += Math.abs(actualX - theirX) + Math.abs(actualY - theirY);
+        }
+        Float s = sum/size;
+        int score = s.intValue();
+        Log.v("score",Integer.toString(score));
+        return score;
     }
-
 }
