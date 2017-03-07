@@ -58,6 +58,7 @@ public class BubbleView extends View {
             }
         }else{
             Log.v("avgTime", Double.toString(averageTime) + " seconds");
+            BubbleActivity.textView.setText("Average reaction time: " + averageTime +" seconds");
         }
     }
 
