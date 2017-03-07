@@ -8,7 +8,9 @@ import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
+import java.util.Random;
 
 
 public class BubbleView extends View {
@@ -17,6 +19,8 @@ public class BubbleView extends View {
     int num2;
     int circleX;
     int circleY;
+    Random r = new Random();
+
 
     public BubbleView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -24,6 +28,7 @@ public class BubbleView extends View {
         paint.setColor(Color.GREEN);
         num = -1;
         num2 = -1;
+
     }
 
     protected void onDraw(Canvas canvas){
@@ -38,6 +43,8 @@ public class BubbleView extends View {
         canvas.drawCircle(circleX,circleY,radius,paint);
 
         if(isSwitched()) {
+            circleX = r.nextInt(x - 1);
+            circleY = r.nextInt(y - 1);
             paint.setColor(Color.RED);
             canvas.drawColor(Color.WHITE);
             canvas.drawCircle(circleX,circleY,radius,paint);
