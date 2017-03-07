@@ -36,7 +36,7 @@ public class BubbleView extends View {
 
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        if(numTrials < 20) {
+        if(numTrials < 11) {
             int x = getWidth();
             int y = getHeight();
 
