@@ -23,9 +23,9 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         Intent in = getIntent();
-        currUser = in.getExtras();
-        username = currUser.getString("username");
-        tapTestResults = currUser.getIntegerArrayList(username+"Tap Test Results");
+//        currUser = in.getExtras();
+//        username = currUser.getString("username");
+//        tapTestResults = currUser.getIntegerArrayList(username+"Tap Test Results");
 
         if(savedInstanceState != null){
 
@@ -53,12 +53,12 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
-        //saving the bundle for the particular user
-        savedInstanceState.putBundle(currUser.getString("username"), currUser);
-        super.onSaveInstanceState(savedInstanceState);
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle savedInstanceState){
+//        //saving the bundle for the particular user
+//        savedInstanceState.putBundle(currUser.getString("username"), currUser);
+//        super.onSaveInstanceState(savedInstanceState);
+//    }
 
     public void bubbleTest(View view){
         Intent intent = new Intent(this, BubbleActivity.class);

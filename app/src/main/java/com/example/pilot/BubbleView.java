@@ -15,7 +15,7 @@ public class BubbleView extends View {
     public BubbleView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         paint = new Paint();
-        paint.setColor(Color.RED);
+        paint.setColor(Color.GREEN);
     }
 
     protected void onDraw(Canvas canvas){
