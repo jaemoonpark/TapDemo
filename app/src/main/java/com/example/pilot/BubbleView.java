@@ -1,5 +1,6 @@
 package com.example.pilot;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -25,12 +26,15 @@ public class BubbleView extends View {
     protected long endTime;
     protected double averageTime = 0.0;
     int numTrials = 0;
+    BubbleActivity host;
+
     public BubbleView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         paint = new Paint();
         paint.setColor(Color.GREEN);
         num = -1;
         num2 = -1;
+        host = (BubbleActivity) getContext();
 
     }
 
@@ -104,7 +108,12 @@ public class BubbleView extends View {
     }
 
     public void changeNum() {
-        if(num == -1 || num == 0) {
+
+        if(num == -1 ) {
+            host.removeIntro();
+            num = 1;
+            num2 = 0;
+        } else if( num == 0) {
             num = 1;
             num2 = 0;
         } else {

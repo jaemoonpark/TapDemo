@@ -19,5 +19,9 @@ public class BubbleActivity extends AppCompatActivity {
 
     }
 
+    protected void removeIntro() {
+        textView.setText("");
+    }
+
 
 }
