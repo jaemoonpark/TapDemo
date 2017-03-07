@@ -23,7 +23,7 @@ public class BubbleView extends View {
     Random r = new Random();
     protected long startTime;
     protected long endTime;
-    protected long averageTime = 0;
+    protected double averageTime = 0.0;
     int numTrials = 0;
     public BubbleView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -36,7 +36,7 @@ public class BubbleView extends View {
 
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-        if(numTrials < 11) {
+        if(numTrials < 10) {
             int x = getWidth();
             int y = getHeight();
 
@@ -45,7 +45,7 @@ public class BubbleView extends View {
             int radius = 50;
             paint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(circleX, circleY, radius, paint);
-            startTime = System.currentTimeMillis();
+
             if (isSwitched()) {
                 circleX = r.nextInt(x - 1);
                 circleY = r.nextInt(y - 1);
@@ -53,6 +53,7 @@ public class BubbleView extends View {
                 canvas.drawColor(Color.WHITE);
                 canvas.drawCircle(circleX, circleY, radius, paint);
                 num2 = num;
+                startTime = System.currentTimeMillis();
 
             }
         }else{
@@ -83,10 +84,11 @@ public class BubbleView extends View {
             changeNum();
             invalidate();
             endTime = System.currentTimeMillis();
-            if (averageTime == 0) {
-                averageTime = endTime;
-            } else {
-                averageTime = (averageTime + endTime) / 2;
+            double time = ((endTime-startTime)/1000.0);
+            Log.v("time", Double.toString(time));
+
+            if (time <180){
+                averageTime = (averageTime + time) / 2;
             }
             return true;
 
