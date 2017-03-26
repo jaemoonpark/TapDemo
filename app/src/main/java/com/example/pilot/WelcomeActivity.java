@@ -64,4 +64,9 @@ public class WelcomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BubbleActivity.class);
         startActivity(intent);
     }
+
+    public void armTest(View view) {
+        Intent intent = new Intent(this, ArmActivity.class);
+        startActivity(intent);
+    }
 }

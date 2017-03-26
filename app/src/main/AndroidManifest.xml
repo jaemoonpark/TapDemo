@@ -16,19 +16,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
-
-
-
-
-
-
         <activity android:name=".TapTestActivity" />
         <activity android:name=".SpiralActivity" />
         <activity android:name=".LevelActivity" />
-        <activity android:name=".BubbleActivity"></activity>
+        <activity android:name=".BubbleActivity" />
+        <activity android:name=".ArmActivity"></activity>
     </application>
 
 </manifest>
