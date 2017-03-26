@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.example.pilot"
-        minSdkVersion 15
+        minSdkVersion 23
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -20,7 +20,8 @@ android {
             debuggable true
         }
     }
-
+    productFlavors {
+    }
 }
 
 dependencies {

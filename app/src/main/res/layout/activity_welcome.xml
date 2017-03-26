@@ -14,7 +14,8 @@
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large.Inverse" />
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large.Inverse"
+        android:textColor="@android:color/black" />
 
     <Button
         android:layout_width="match_parent"
