@@ -18,6 +18,9 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
     private int tapCount = 3;
     private int curlCount = 0;
     private int curlAttempt = 0;
+    protected long startTime = 0;
+    protected long stopTime = 0;
+    protected double time = 0.00;
     private boolean attemptCurl = false;
     private boolean countCurls = false;
     private boolean initiateOnce = false;
@@ -48,6 +51,7 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
                 initiateOnce = true;
                 startTest = true;
                 txtInstructions.setText("You have attempted 0 curls. You have completed 0 curls.");
+                startTime = System.currentTimeMillis();
             }
         }
     }
@@ -59,31 +63,37 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
             if (countCurls) {
 
                 //attempted arm curl
-                if (attemptCurl && xAxis > 2) {
+                if (attemptCurl && Math.abs(xAxis) > 2) {
                     curlAttempt += 1;
                     txtInstructions.setText("You have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
                     attemptCurl = false;
                 }
                 //attempted and did not finish
-                if (!attemptCurl && xAxis < 0 && zAxis > 8) {
+                if (!attemptCurl && Math.abs(xAxis) < 0.2) {
                     countCurls = false;
                     //end of test
                     if(curlAttempt == 10){
                         startTest = false;
-                        txtInstructions.setText("Test is over. \nYou have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
+                        stopTime = System.currentTimeMillis();
+                        time = (stopTime - startTime);
+                        time = time /1000;
+                        txtInstructions.setText("Test is over. \nYou have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls." + " It took you " + Double.toString(time) + " seconds");
                     }
                 }
 
                 //a completed arm test
                 //set x axis for 9  and zaxis -2 for a more strict 90 degree arm curl
-                if (xAxis > 8 && zAxis < -1) {
+                if (Math.abs(xAxis) > 8) {
                     curlCount += 1;
                     txtInstructions.setText("You have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
                     countCurls = false;
                     //end of test
                     if(curlAttempt == 10){
                         startTest = false;
-                        txtInstructions.setText("Test is over. \nYou have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
+                        stopTime = System.currentTimeMillis();
+                        time = (stopTime - startTime);
+                        time = time /1000;
+                        txtInstructions.setText("Test is over. \nYou have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls." + " It took you " + Double.toString(time) + " seconds");
                     }
                 }
                 System.out.println("X axis is " + xAxis);
@@ -91,7 +101,7 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
                 System.out.println("--------------------");
             } else {
                 //indication arm got laid back down
-                if (xAxis < 0 && zAxis > 8) {
+                if (Math.abs(xAxis) < 0.2) {
                     countCurls = true;
                     attemptCurl = true;
                 }
