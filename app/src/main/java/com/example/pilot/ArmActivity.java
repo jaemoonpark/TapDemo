@@ -50,27 +50,26 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
     public final void onSensorChanged(SensorEvent event) {
         // The light sensor returns a single value.
         // Many sensors return 3 values, one for each axis.
+        float xAxis = event.values[0];
+        float zAxis = event.values[2];
         if(countCurls) {
-            float xAxis = event.values[0];
-            float zAxis = event.values[2];
             //debug garlic bread
-
-            if(xAxis > 9 && zAxis < -2){
+//            float xAxis = event.values[0];
+//            float zAxis = event.values[2];
+            //set x axis for 9  and zaxis -2 for a more strict 90 degree arm curl
+            if(xAxis > 8 && zAxis < -1){
                 curlCount += 1;
                 txtInstructions.setText("You have completed "+ curlCount + " curls.");
                 countCurls = false;
-                //cooldown
-                new CountDownTimer(1000, 1000) {
-                    public void onTick(long ticks) {
-                    }
-                    public void onFinish(){
-                        countCurls = true;
-                    }
-                }.start();
             }
             System.out.println("X axis is " + xAxis);
             System.out.println("Z axis is " + zAxis);
             System.out.println("--------------------");
+        }else{
+            //indication arm got laid back down
+            if(xAxis < 0 && zAxis > 8){
+                countCurls = true;
+            }
         }
 
     }
