@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +16,9 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
     private SensorManager mSensorManager;
     private Sensor mSensor;
     private int tapCount = 3;
-    private boolean startTest = false;
+    private int curlCount = 0;
+    private boolean countCurls = false;
+    private boolean initiateOnce = false;
     boolean getInitialValues;
     private TextView txtInstructions;
 
@@ -33,12 +36,13 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
     }
 
     public void startTest(View view){
-        if(!startTest) {
+        if(!countCurls && !initiateOnce) {
             tapCount -= 1;
             txtInstructions.setText("Make sure you're holding your phone/tablet in landscape mode. Ensure your arm is laid out comfortably on a flat surface. \nTo begin, tap " + tapCount + " times with the arm that is not being curled.");
             if (tapCount == 0) {
-                startTest = true;
-                txtInstructions.setText("");
+                countCurls = true;
+                initiateOnce = true;
+                txtInstructions.setText("You have completed 0 curls.");
             }
         }
     }
@@ -46,14 +50,29 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
     public final void onSensorChanged(SensorEvent event) {
         // The light sensor returns a single value.
         // Many sensors return 3 values, one for each axis.
+        if(countCurls) {
             float xAxis = event.values[0];
-            float yAxis = event.values[1];
             float zAxis = event.values[2];
-        //debug garlic bread
-        System.out.println("X axis is " + xAxis);
-        System.out.println("Y axis is " + yAxis);
-        System.out.println("Z axis is " + zAxis);
-        System.out.println("--------------------");
+            //debug garlic bread
+
+            if(xAxis > 9 && zAxis < -2){
+                curlCount += 1;
+                txtInstructions.setText("You have completed "+ curlCount + " curls.");
+                countCurls = false;
+                //cooldown
+                new CountDownTimer(1000, 1000) {
+                    public void onTick(long ticks) {
+                    }
+                    public void onFinish(){
+                        countCurls = true;
+                    }
+                }.start();
+            }
+            System.out.println("X axis is " + xAxis);
+            System.out.println("Z axis is " + zAxis);
+            System.out.println("--------------------");
+        }
+
     }
 
     @Override
