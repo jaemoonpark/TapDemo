@@ -67,6 +67,11 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
                 //attempted and did not finish
                 if (!attemptCurl && xAxis < 0 && zAxis > 8) {
                     countCurls = false;
+                    //end of test
+                    if(curlAttempt == 10){
+                        startTest = false;
+                        txtInstructions.setText("Test is over. \nYou have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
+                    }
                 }
 
                 //a completed arm test
@@ -75,6 +80,11 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
                     curlCount += 1;
                     txtInstructions.setText("You have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
                     countCurls = false;
+                    //end of test
+                    if(curlAttempt == 10){
+                        startTest = false;
+                        txtInstructions.setText("Test is over. \nYou have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
+                    }
                 }
                 System.out.println("X axis is " + xAxis);
                 System.out.println("Z axis is " + zAxis);
