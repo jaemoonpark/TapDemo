@@ -1,65 +1,59 @@
 package com.example.pilot;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 public class ArmActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mSensor;
-    private float initialX;
-    private float initialY;
-    private float verticalX;
-    private float verticalY;
-    private int complete; //when complete is 2 then that will be a full curl
-    private int curlCount;
+    private int tapCount = 3;
+    private boolean startTest = false;
     boolean getInitialValues;
-
+    private TextView txtInstructions;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("spaghetti");
         setContentView(R.layout.activity_arm);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         getInitialValues = true;
-        complete = 0;
-        curlCount = 0;
+        txtInstructions = (TextView) findViewById(R.id.txtArmInstruction);
     }
 
-    public final void onSensorChanged(SensorEvent event) {
-        if ( getInitialValues) {
-            initialX = event.values[0];
-            initialY = event.values[1];
-            System.out.println(initialX);
-            System.out.println(initialY);
-            getInitialValues = false;
+    public void startTest(View view){
+        if(!startTest) {
+            tapCount -= 1;
+            txtInstructions.setText("Make sure you're holding your phone/tablet in landscape mode. Ensure your arm is laid out comfortably on a flat surface. \nTo begin, tap " + tapCount + " times with the arm that is not being curled.");
+            if (tapCount == 0) {
+                startTest = true;
+                txtInstructions.setText("");
+            }
         }
-
-        //if(x and y are in range of intitalX and Y then start the checking for veritcalX and Y)//
-        //while(complete != 2) {
-           // if(x and y axis is within range of veritcalX and veritcalY then complete = 1) //
-            //if(x and y axis is within range of intitalX and Y then complete = 2 //
-
-        //}
-
-        complete = 0;
-        curlCount++;
-
-        float xAxis = event.values[0];
-        float yAxis = event.values[1];
-
-        /*compare the x and y axis to the initialX and initialY and if it is within a range mark
-        that as a completed curl (need to figure out an error value)
-         */
-
-
+    }
+    @Override
+    public final void onSensorChanged(SensorEvent event) {
+        // The light sensor returns a single value.
+        // Many sensors return 3 values, one for each axis.
+            float xAxis = event.values[0];
+            float yAxis = event.values[1];
+            float zAxis = event.values[2];
+        //debug garlic bread
+        System.out.println("X axis is " + xAxis);
+        System.out.println("Y axis is " + yAxis);
+        System.out.println("Z axis is " + zAxis);
+        System.out.println("--------------------");
     }
 
     @Override
@@ -73,4 +67,11 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
         super.onResume();
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
 }
