@@ -58,19 +58,20 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
     @Override
     public final void onSensorChanged(SensorEvent event) {
         if(startTest) {
-            float xAxis = event.values[0];
-            float zAxis = event.values[2];
+            float xAxis = Math.abs(event.values[0]);
+            float zAxis = Math.abs(event.values[2]);
             if (countCurls) {
-
+                System.out.println("RIGHT NOW TRYING TO MEASURE A COMPLETE CURL");
                 //attempted arm curl
-                if (attemptCurl && Math.abs(xAxis) > 2) {
+                if (attemptCurl && xAxis > 4) {
                     curlAttempt += 1;
                     txtInstructions.setText("You have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
                     attemptCurl = false;
                 }
                 //attempted and did not finish
-                if (!attemptCurl && Math.abs(xAxis) < 0.2) {
-                    countCurls = false;
+                if (!attemptCurl && xAxis < .2) {
+                    System.out.println("FAILED");
+                    attemptCurl= true;
                     //end of test
                     if(curlAttempt == 10){
                         startTest = false;
@@ -83,7 +84,7 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
 
                 //a completed arm test
                 //set x axis for 9  and zaxis -2 for a more strict 90 degree arm curl
-                if (Math.abs(xAxis) > 8) {
+                if (xAxis > 8.5 && zAxis < 1.5) {
                     curlCount += 1;
                     txtInstructions.setText("You have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
                     countCurls = false;
@@ -96,17 +97,20 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
                         txtInstructions.setText("Test is over. \nYou have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls." + " It took you " + Double.toString(time) + " seconds");
                     }
                 }
-                System.out.println("X axis is " + xAxis);
-                System.out.println("Z axis is " + zAxis);
-                System.out.println("--------------------");
+
             } else {
                 //indication arm got laid back down
-                if (Math.abs(xAxis) < 0.2) {
+                System.out.println("COMPLETED CURL SECTION");
+                if (xAxis < .4) {
                     countCurls = true;
                     attemptCurl = true;
                 }
             }
+            System.out.println("X axis is " + xAxis);
+            System.out.println("Z axis is " + zAxis);
+            System.out.println("--------------------");
         }
+
 
     }
 
