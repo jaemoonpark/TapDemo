@@ -1,19 +1,52 @@
 package com.example.pilot;
 
+import android.Manifest;
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.ValueRange;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
 
 //Using this as a guide for the drawing functionality: https://code.tutsplus.com/tutorials/android-sdk-create-a-drawing-app-touch-interaction--mobile-19202
 
@@ -38,10 +71,12 @@ public class SpiralView extends View {
     protected double b = .15;
     protected int horizontalMovement = 600;
     protected int verticalMovement = 800;
+    protected SpiralActivity xxx;
 
     public SpiralView(Context context, AttributeSet attributes) {
         super(context, attributes);
         drawPrep();
+        xxx = (SpiralActivity) getContext();
     }
 
     protected void createSpiral(){
@@ -60,6 +95,7 @@ public class SpiralView extends View {
         drawCanvas.drawPath(tracePath,paint);
         tracePath.reset();
     }
+
 
     //Calculates x values of spiral
     public int spiralXValues(double a, double b, double t){
@@ -203,6 +239,8 @@ public class SpiralView extends View {
         Float s = sum/size;
         int score = s.intValue();
         Log.v("score",Integer.toString(score));
+        xxx.runFromFragment();
         return score;
     }
+
 }

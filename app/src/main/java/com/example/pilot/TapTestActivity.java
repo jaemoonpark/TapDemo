@@ -1,20 +1,73 @@
 package com.example.pilot;
 
-import android.Manifest;
+
 import android.content.Intent;
-import android.os.CountDownTimer;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.*;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class TapTestActivity extends AppCompatActivity {
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+
+import com.google.api.services.sheets.v4.SheetsScopes;
+
+import com.google.api.services.sheets.v4.model.*;
+
+import android.Manifest;
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+
+public class TapTestActivity extends AppCompatActivity  {
     public boolean startTest = false;
     public boolean leftHandTest = true;
     public boolean canTapScreen = true;
@@ -26,6 +79,7 @@ public class TapTestActivity extends AppCompatActivity {
     ArrayList<Integer> tapTestResults;
     String dominance;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +88,8 @@ public class TapTestActivity extends AppCompatActivity {
         Intent in = getIntent();
         currUser = in.getExtras();
         tapTestResults = currUser.getIntegerArrayList(currUser.getString("username"));
-        dominance = currUser.getString(currUser.getString("username")+"dominantHand");
+        dominance = currUser.getString(currUser.getString("username") + "dominantHand");
+
     }
 
     public void countTap(View view) {
@@ -62,7 +117,8 @@ public class TapTestActivity extends AppCompatActivity {
                             new CountDownTimer(3000, 1000) {
                                 public void onTick(long pie) {
                                 }
-                                public void onFinish(){
+
+                                public void onFinish() {
                                     canTapScreen = true;
                                 }
                             }.start();
@@ -70,7 +126,7 @@ public class TapTestActivity extends AppCompatActivity {
                         } else {
                             int rightHandScore = getScore("Right");
                             int leftHandScore = getScore("Left");
-                            int averageScore  = getScore("Average");
+                            int averageScore = getScore("Average");
 
                             System.out.println("Right Hand Score : " + rightHandScore);
                             System.out.println("Left Hand Score : " + leftHandScore);
@@ -101,10 +157,10 @@ public class TapTestActivity extends AppCompatActivity {
         }
     }
 
-    public void bringMeHome(){
+    public void bringMeHome() {
         tapTestResults.add(leftHand);
         tapTestResults.add(rightHand);
-        currUser.putIntegerArrayList(currUser.getString("username")+"Tap Test Results", tapTestResults);
+        currUser.putIntegerArrayList(currUser.getString("username") + "Tap Test Results", tapTestResults);
 
         Intent intent = new Intent(this, WelcomeActivity.class);
         intent.putExtras(currUser);
@@ -120,7 +176,7 @@ public class TapTestActivity extends AppCompatActivity {
 
     public int getScore(String type) {
         if (type.equals("Right")) {
-            if(rightHand <= 20) {
+            if (rightHand <= 20) {
                 return 1;
             } else if (20 < rightHand && rightHand < 30) {
                 return 2;
@@ -132,7 +188,7 @@ public class TapTestActivity extends AppCompatActivity {
                 return 5;
             }
         } else if (type.equals("Left")) {
-            if(leftHand <= 20) {
+            if (leftHand <= 20) {
                 return 1;
             } else if (20 < leftHand && leftHand < 30) {
                 return 2;
@@ -146,7 +202,7 @@ public class TapTestActivity extends AppCompatActivity {
         } else if (type.equals("Average")) {
             int avg = (leftHand + rightHand) / 2;
 
-            if(avg <= 20) {
+            if (avg <= 20) {
                 return 1;
             } else if (20 < avg && avg < 30) {
                 return 2;
@@ -160,4 +216,5 @@ public class TapTestActivity extends AppCompatActivity {
         }
         return -1;
     }
+
 }
