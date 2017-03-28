@@ -344,6 +344,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
             if (values != null) {
                 results.add("Name, Major");
                 for (List row : values) {
+                    System.out.println(row.get(0) + ", " + row.get(4));
                     results.add(row.get(0) + ", " + row.get(4));
                 }
             }
