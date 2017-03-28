@@ -57,6 +57,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
     private static final String BUTTON_TEXT = "Call Google Sheets API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {SheetsScopes.SPREADSHEETS};
+    private int score;
 
     final private static String spreadsheetID = "1areTOSgIUjlvTHgKAiMljWJJ7fIUludIkd0emcY0flA";
 
@@ -70,10 +71,11 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
 
     }
 
-    protected void runFromFragment(){
+    protected void runFromFragment(int score){
         mCredential = GoogleAccountCredential.usingOAuth2(
                 this, Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
+        this.score = score;
         getResultsFromApi();
     }
 
@@ -331,7 +333,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
         public List<List<Object>> getData ()  {
 
             List<Object> data1 = new ArrayList<Object>();
-            data1.add ("Ashwin");
+            data1.add (score);
 
             List<List<Object>> data = new ArrayList<List<Object>>();
             data.add (data1);
