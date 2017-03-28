@@ -336,11 +336,11 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
             String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
             String range = "Class Data!A2:E";
             List<String> results = new ArrayList<String>();
-            System.out.println("got results");
             ValueRange response = this.mService.spreadsheets().values()
                     .get(spreadsheetId, range)
                     .execute();
-            System.out.println("resposne gay");
+            System.out.println("resposne works!");
+            System.out.println("Response Range: " + response.getRange());
             List<List<Object>> values = response.getValues();
             if (values != null) {
                 results.add("Name, Major");
@@ -356,12 +356,12 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
         @Override
         protected void onPreExecute() {
             //nothing
-            System.out.println("predicks");
+            System.out.println("pre");
         }
 
         @Override
         protected void onPostExecute(List<String> output) {
-            System.out.println("postdicks");
+            System.out.println("post");
             if (output == null || output.size() == 0) {
                 Toast.makeText(getApplicationContext(), "No results returned.",
                         Toast.LENGTH_LONG).show();
