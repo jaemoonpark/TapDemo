@@ -111,10 +111,13 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
      */
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
     private void chooseAccount() {
+        System.out.println("pie1");
         if (EasyPermissions.hasPermissions(
                 this, Manifest.permission.GET_ACCOUNTS)) {
+            System.out.println("garlic finish");
             String accountName = getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
+            System.out.println("permission: " + accountName);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
                 getResultsFromApi();
@@ -126,11 +129,13 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
             }
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog
+            System.out.println("needs to reqeuest permission");
             EasyPermissions.requestPermissions(
                     this,
                     "This app needs to access your Google account (via Contacts).",
                     REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
+            System.out.println("pie finish");
         }
     }
 
