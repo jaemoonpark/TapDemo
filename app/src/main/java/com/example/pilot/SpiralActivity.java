@@ -334,7 +334,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
          */
         private List<String> getDataFromApi() throws IOException {
             String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
-            String range = "Class Data!A2:E";
+            String range = "Class Data!A2:A4";
             List<String> results = new ArrayList<String>();
             ValueRange response = this.mService.spreadsheets().values()
                     .get(spreadsheetId, range)
