@@ -335,9 +335,11 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
             String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
             String range = "Class Data!A2:E";
             List<String> results = new ArrayList<String>();
+            System.out.println("hello");
             ValueRange response = this.mService.spreadsheets().values()
                     .get(spreadsheetId, range)
                     .execute();
+            System.out.println("Response Range: " + response.getRange());
             List<List<Object>> values = response.getValues();
             if (values != null) {
                 results.add("Name, Major");

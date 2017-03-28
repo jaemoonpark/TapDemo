@@ -68,7 +68,7 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
             //setting y draw coordinate
             yDraw = ((bullseyeView.getY() + bullseyeView.getHeight()) / 2) + (yAxis * (Resources.getSystem().getDisplayMetrics().heightPixels / 15));
 
-                   System.out.println("xdraw: " + xDraw + " y draw: " + yDraw);
+            //       System.out.println("xdraw: " + xDraw + " y draw: " + yDraw);
             //       bullseyeView.tracePath.moveTo(xDraw,yDraw);
             System.out.println("x axis: " + xAxis + " y axis: " + yAxis);
 
@@ -150,4 +150,3 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
 
     }
 }
-
