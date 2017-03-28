@@ -1,63 +1,115 @@
 package com.example.pilot;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 public class ArmActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mSensor;
-    private float initialX;
-    private float initialY;
-    private float verticalX;
-    private float verticalY;
-    private int complete; //when complete is 2 then that will be a full curl
-    private int curlCount;
+    private int tapCount = 3;
+    private int curlCount = 0;
+    private int curlAttempt = 0;
+    protected long startTime = 0;
+    protected long stopTime = 0;
+    protected double time = 0.00;
+    private boolean attemptCurl = false;
+    private boolean countCurls = false;
+    private boolean initiateOnce = false;
+    private boolean startTest = false;
     boolean getInitialValues;
-
+    private TextView txtInstructions;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("spaghetti");
         setContentView(R.layout.activity_arm);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         getInitialValues = true;
-        complete = 0;
-        curlCount = 0;
+        txtInstructions = (TextView) findViewById(R.id.txtArmInstruction);
     }
 
-    public final void onSensorChanged(SensorEvent event) {
-        if ( getInitialValues) {
-            initialX = event.values[0];
-            initialY = event.values[1];
-            System.out.println(initialX);
-            System.out.println(initialY);
-            getInitialValues = false;
+    public void startTest(View view){
+        if(!countCurls && !initiateOnce) {
+            tapCount -= 1;
+            txtInstructions.setText("Make sure you're holding your phone/tablet in landscape mode. Ensure your arm is laid out comfortably on a flat surface. \nTo begin, tap " + tapCount + " times with the arm that is not being curled.");
+            if (tapCount == 0) {
+                countCurls = true;
+                attemptCurl = true;
+                initiateOnce = true;
+                startTest = true;
+                txtInstructions.setText("You have attempted 0 curls. You have completed 0 curls.");
+                startTime = System.currentTimeMillis();
+            }
         }
+    }
+    @Override
+    public final void onSensorChanged(SensorEvent event) {
+        if(startTest) {
+            float xAxis = Math.abs(event.values[0]);
+            float zAxis = Math.abs(event.values[2]);
+            if (countCurls) {
+                System.out.println("RIGHT NOW TRYING TO MEASURE A COMPLETE CURL");
+                //attempted arm curl
+                if (attemptCurl && xAxis > 4) {
+                    curlAttempt += 1;
+                    txtInstructions.setText("You have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
+                    attemptCurl = false;
+                }
+                //attempted and did not finish
+                if (!attemptCurl && xAxis < .2) {
+                    System.out.println("FAILED");
+                    attemptCurl= true;
+                    //end of test
+                    if(curlAttempt == 10){
+                        startTest = false;
+                        stopTime = System.currentTimeMillis();
+                        time = (stopTime - startTime);
+                        time = time /1000;
+                        txtInstructions.setText("Test is over. \nYou have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls." + " It took you " + Double.toString(time) + " seconds");
+                    }
+                }
 
-        //if(x and y are in range of intitalX and Y then start the checking for veritcalX and Y)//
-        //while(complete != 2) {
-           // if(x and y axis is within range of veritcalX and veritcalY then complete = 1) //
-            //if(x and y axis is within range of intitalX and Y then complete = 2 //
+                //a completed arm test
+                //set x axis for 9  and zaxis -2 for a more strict 90 degree arm curl
+                if (xAxis > 8.5 && zAxis < 1.5) {
+                    curlCount += 1;
+                    txtInstructions.setText("You have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls.");
+                    countCurls = false;
+                    //end of test
+                    if(curlAttempt == 10){
+                        startTest = false;
+                        stopTime = System.currentTimeMillis();
+                        time = (stopTime - startTime);
+                        time = time /1000;
+                        txtInstructions.setText("Test is over. \nYou have attempted " + curlAttempt + " curls. You have completed " + curlCount + " curls." + " It took you " + Double.toString(time) + " seconds");
+                    }
+                }
 
-        //}
-
-        complete = 0;
-        curlCount++;
-
-        float xAxis = event.values[0];
-        float yAxis = event.values[1];
-
-        /*compare the x and y axis to the initialX and initialY and if it is within a range mark
-        that as a completed curl (need to figure out an error value)
-         */
+            } else {
+                //indication arm got laid back down
+                System.out.println("COMPLETED CURL SECTION");
+                if (xAxis < .4) {
+                    countCurls = true;
+                    attemptCurl = true;
+                }
+            }
+            System.out.println("X axis is " + xAxis);
+            System.out.println("Z axis is " + zAxis);
+            System.out.println("--------------------");
+        }
 
 
     }
@@ -73,4 +125,11 @@ public class ArmActivity extends AppCompatActivity implements SensorEventListene
         super.onResume();
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
 }
