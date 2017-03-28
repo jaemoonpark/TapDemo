@@ -31,6 +31,8 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.BatchUpdateValuesRequest;
+import com.google.api.services.sheets.v4.model.BatchUpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import java.io.IOException;
@@ -54,7 +56,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
 
     private static final String BUTTON_TEXT = "Call Google Sheets API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = {SheetsScopes.SPREADSHEETS_READONLY};
+    private static final String[] SCOPES = {SheetsScopes.SPREADSHEETS};
 
     final private static String spreadsheetID = "1areTOSgIUjlvTHgKAiMljWJJ7fIUludIkd0emcY0flA";
 
@@ -324,6 +326,19 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
             }
         }
 
+
+        //source: http://stackoverflow.com/questions/38107237/write-data-to-google-sheet-using-google-sheet-api-v4-java-sample-code
+        public List<List<Object>> getData ()  {
+
+            List<Object> data1 = new ArrayList<Object>();
+            data1.add ("Ashwin");
+
+            List<List<Object>> data = new ArrayList<List<Object>>();
+            data.add (data1);
+
+            return data;
+        }
+
         /**
          * Fetch a list of names and majors of students in a sample spreadsheet:
          * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
@@ -331,24 +346,29 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
          * @return List of names and majors
          * @throws IOException
          */
+        //code modified from: http://stackoverflow.com/questions/38107237/write-data-to-google-sheet-using-google-sheet-api-v4-java-sample-code
+
         private List<String> getDataFromApi() throws IOException {
-            String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
-            String range = "Class Data!A2:E";
+            String spreadsheetId = "1areTOSgIUjlvTHgKAiMljWJJ7fIUludIkd0emcY0flA";
+            String range = "A1:A1";
             List<String> results = new ArrayList<String>();
             System.out.println("hello");
-            ValueRange response = this.mService.spreadsheets().values()
-                    .get(spreadsheetId, range)
-                    .execute();
-            System.out.println("Response Range: " + response.getRange());
-            List<List<Object>> values = response.getValues();
-            if (values != null) {
-                results.add("Name, Major");
-                for (List row : values) {
-                    System.out.println(row.get(0) + ", " + row.get(4));
-                    results.add(row.get(0) + ", " + row.get(4));
-                }
-            }
-            return results;
+            ValueRange oRange = new ValueRange();
+
+            List<List<Object>> arrData = getData();
+            oRange.setRange(range);
+            oRange.setValues(arrData);
+
+            List<ValueRange> oList = new ArrayList<>();
+            oList.add(oRange);
+
+            BatchUpdateValuesRequest oRequest = new BatchUpdateValuesRequest();
+            oRequest.setValueInputOption("RAW");
+            oRequest.setData(oList);
+
+            BatchUpdateValuesResponse oResp1 = this.mService.spreadsheets().values().batchUpdate(spreadsheetId, oRequest).execute();
+
+            return null;
         }
 
 
