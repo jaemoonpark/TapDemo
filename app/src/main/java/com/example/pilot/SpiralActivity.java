@@ -62,6 +62,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        System.out.println("jokes on u we still alive");
         setContentView(R.layout.activity_spiral);
         textViewObj = (TextView) findViewById(R.id.timerView);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -335,14 +336,17 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
             String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
             String range = "Class Data!A2:E";
             List<String> results = new ArrayList<String>();
+            System.out.println("got results");
             ValueRange response = this.mService.spreadsheets().values()
                     .get(spreadsheetId, range)
                     .execute();
+            System.out.println("resposne gay");
             List<List<Object>> values = response.getValues();
             if (values != null) {
                 results.add("Name, Major");
                 for (List row : values) {
                     results.add(row.get(0) + ", " + row.get(4));
+                    System.out.println(row.get(0) + ", " + row.get(4));
                 }
             }
             return results;
@@ -352,10 +356,12 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
         @Override
         protected void onPreExecute() {
             //nothing
+            System.out.println("predicks");
         }
 
         @Override
         protected void onPostExecute(List<String> output) {
+            System.out.println("postdicks");
             if (output == null || output.size() == 0) {
                 Toast.makeText(getApplicationContext(), "No results returned.",
                         Toast.LENGTH_LONG).show();
