@@ -239,7 +239,7 @@ public class SpiralView extends View {
         Float s = sum/size;
         int score = s.intValue();
         Log.v("score",Integer.toString(score));
-        xxx.runFromFragment();
+        xxx.runFromFragment(score);
         return score;
     }
 
