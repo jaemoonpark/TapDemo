@@ -2,6 +2,7 @@ package com.example.pilot;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+
 
 import java.util.Random;
 
@@ -63,8 +66,21 @@ public class BubbleView extends View {
         }else{
             Log.v("avgTime", Double.toString(averageTime) + " seconds");
             BubbleActivity.textView.setText("Average reaction time: " + averageTime +" seconds");
+
+
         }
     }
+
+//    private void sendToSheets() {
+//        Intent sheets = new Intent(getContext(), Sheets.class);
+//        String myUserId = "t01p01";
+//
+//
+//        sheets.putExtra(Sheets.EXTRA_TYPE, Sheets.UpdateType.LH_POP.ordinal());
+//        System.out.println("LHPOP");
+//        sheets.putExtra(Sheets.EXTRA_USER, myUserId);
+//        sheets.putExtra(Sheets.EXTRA_VALUE, averageTime);
+//    }
 
     private double getCurrentCircleX(){
         return circleX;
@@ -81,6 +97,7 @@ public class BubbleView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         double touchX = event.getX();
         double touchY = event.getY();
+        Log.v("test","Hello");
 
 
         if(isWithin(getCurrentCircleX(), touchX) && isWithin(getCurrentCircleY(), touchY)) {

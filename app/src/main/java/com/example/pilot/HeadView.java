@@ -1,38 +1,24 @@
 package com.example.pilot;
 
-import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileOutputStream;
 
-//Using this as a guide for the drawing functionality: https://code.tutsplus.com/tutorials/android-sdk-create-a-drawing-app-touch-interaction--mobile-19202
-
-public class BullseyeDrawView extends View {
-
+class HeadView extends View {
     protected Path tracePath;
     protected Paint paint;
     protected Paint canvasPaint;
-    protected static final int RED= 0xff660000;
     protected Canvas drawCanvas;
     protected Bitmap canvasBitmap;
-    protected long startTime = 0;
-    protected long stopTime = 0;
-    protected double time = 0.00;
 
-    public BullseyeDrawView(Context context, AttributeSet attributes) {
+
+    public HeadView(Context context, AttributeSet attributes) {
         super(context, attributes);
         drawPrep();
     }
@@ -44,7 +30,7 @@ public class BullseyeDrawView extends View {
 
         //The actual paint that will be on the screen
         paint = new Paint();
-        paint.setColor(Color.TRANSPARENT);
+        paint.setColor(Color.GREEN);
 
         //These will make drawing smoother
         paint.setAntiAlias(true);
@@ -76,7 +62,7 @@ public class BullseyeDrawView extends View {
     }
 
     protected void onDraw(Canvas canvas){
-        canvas.drawBitmap(canvasBitmap, 0,0, canvasPaint);
+       // canvas.drawBitmap(canvasBitmap, 0,0, canvasPaint);
 
         // resets the path to middle to remove weird intialization bug
 //        double x = getWidth() / 2;
@@ -86,10 +72,6 @@ public class BullseyeDrawView extends View {
 
 
         canvas.drawPath(tracePath, paint);
-    }
-
-    public void setPaintColor() {
-        paint.setColor(Color.GREEN);
     }
 
 }

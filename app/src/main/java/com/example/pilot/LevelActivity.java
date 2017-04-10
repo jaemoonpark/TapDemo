@@ -1,24 +1,28 @@
 package com.example.pilot;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import java.lang.Math;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import cmsc436.tharri16.googlesheetshelper.CMSC436Sheet;
 
 
 /* Learning how to gather sensor data that senses movement of device */
-public class LevelActivity extends AppCompatActivity implements SensorEventListener {
+public class LevelActivity extends AppCompatActivity implements SensorEventListener, CMSC436Sheet.Host {
     private SensorManager mSensorManager;
     private Sensor mSensor;
     private float xDraw;
@@ -31,6 +35,8 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     private String score;
     public BullseyeDrawView bullseyeView;
     private ArrayList<Double> distancesArray = new ArrayList<Double>();
+    private CMSC436Sheet sheet;
+
     private TextView scoreView;
 
     @Override
@@ -56,8 +62,6 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
-        // The light sensor returns a single value.
-        // Many sensors return 3 values, one for each axis.
         if(testStarted) {
             float xAxis = event.values[0];
             float yAxis = event.values[1];
@@ -76,6 +80,7 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
 //            bullseyeView.tracePath.moveTo(xDraw,yDraw);
             bullseyeView.tracePath.lineTo(xDraw, yDraw);
             bullseyeView.invalidate();
+            bullseyeView.setPaintColor();
         }
     }
 
@@ -125,9 +130,15 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         }
     }
 
+
     public void startBullseyeTest(View view){
+        float xCenter = (bullseyeView.getX() + bullseyeView.getWidth()) / 2;
+        float yCenter = (bullseyeView.getY() + bullseyeView.getHeight()) / 2;
+
+
         if(!testStarted){
             testStarted = true;
+            bullseyeView.tracePath.moveTo(xCenter, yCenter);
             new CountDownTimer(10000, 500){
                 @Override
                 public void onTick(long millisUntilFinished){
@@ -142,11 +153,60 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
                     String finishScore = getScore(distancesArray);
                     System.out.println(finishScore);
                     scoreView.setText("Score: " + finishScore);
+                    sendResultToSheet();
                     scoreView.setVisibility(View.VISIBLE);
 
                 }
             }.start();
         }
 
+    }
+
+
+    private void sendResultToSheet(){
+        sheet = new CMSC436Sheet(this, getString(R.string.app_name), getString(R.string.CMSC436Sheet_spreadsheet_id));
+        sheet.writeData(CMSC436Sheet.TestType.LH_TAP, "fuzzy", CMSC436Sheet.unixToSheetsEpoch(System.currentTimeMillis()));
+        sheet.writeData(CMSC436Sheet.TestType.LH_TAP, "bunny", 1.23f);
+    }
+    /* neccessary? */
+    @Override
+    public void onRequestPermissionsResult (int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        sheet.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        sheet.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public int getRequestCode(CMSC436Sheet.Action action) {
+        switch (action) {
+            case REQUEST_ACCOUNT_NAME:
+                return 2;
+            case REQUEST_AUTHORIZATION:
+                return 2;
+            case REQUEST_PERMISSIONS:
+                return 2;
+            case REQUEST_PLAY_SERVICES:
+                return 2;
+            default:
+                return -1; // boo java doesn't know we exhausted the enum
+        }
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public void notifyFinished(Exception e) {
+        if (e != null) {
+            throw new RuntimeException(e); // just to see the exception easily in logcat
+        }
+
+        Log.i(getClass().getSimpleName(), "Done");
     }
 }
