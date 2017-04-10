@@ -10,6 +10,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager mSensorManager;
     private Sensor mSensor;
     private TextView instructions;
+    private Button button;
 
     private boolean getMidpoint;
     private float midX;
@@ -41,10 +43,10 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_head);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        instructions.append("\n For this test you will place the phone on top on your head and it will record your sway. \n" +
-                "When you start place the phone on your head and when you hear the beep stay as still as possible until you hear a second beep.\n" +
-                "When you hit ok, you will have five seconds to place the phone on your head before the test starts");
+        instructions = (TextView) findViewById(R.id.textbox);
+        button = (Button) findViewById(R.id.button7);
         headView = (HeadView) findViewById(R.id.headDraw);
+
         aThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 16;
         bThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 8;
         cThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 4;
@@ -68,6 +70,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
             if(getMidpoint) {
                 midX = xAxis;
                 midY = yAxis;
+                getMidpoint = false;
             }
 
             //setting x draw coordinate
@@ -80,7 +83,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
             System.out.println("x axis: " + xAxis + " y axis: " + yAxis);
 
 
-            headView.tracePath.lineTo(xDraw, yDraw);
+//            headView.tracePath.lineTo(xDraw, yDraw);
             headView.invalidate();
         }
     }
@@ -132,8 +135,15 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void startHeadTest(View view){
+        float xCenter = (headView.getX() + headView.getWidth()) / 2;
+        float yCenter = (headView.getY() + headView.getHeight()) / 2;
+
         if(!testStarted){
             testStarted = true;
+            headView.tracePath.moveTo(xCenter, yCenter);
+            instructions.setVisibility(View.GONE);
+            button.setVisibility(View.GONE);
+
             new CountDownTimer(10000, 500){
                 @Override
                 public void onTick(long millisUntilFinished){

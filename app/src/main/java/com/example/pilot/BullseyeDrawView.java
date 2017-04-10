@@ -44,7 +44,7 @@ public class BullseyeDrawView extends View {
 
         //The actual paint that will be on the screen
         paint = new Paint();
-        paint.setColor(Color.GREEN);
+        paint.setColor(Color.TRANSPARENT);
 
         //These will make drawing smoother
         paint.setAntiAlias(true);
@@ -86,6 +86,10 @@ public class BullseyeDrawView extends View {
 
 
         canvas.drawPath(tracePath, paint);
+    }
+
+    public void setPaintColor() {
+        paint.setColor(Color.GREEN);
     }
 
 }

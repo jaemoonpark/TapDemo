@@ -9,20 +9,14 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * Created by Jada on 4/9/2017.
- */
 
 class HeadView extends View {
     protected Path tracePath;
     protected Paint paint;
     protected Paint canvasPaint;
-    protected static final int RED= 0xff660000;
     protected Canvas drawCanvas;
     protected Bitmap canvasBitmap;
-    protected long startTime = 0;
-    protected long stopTime = 0;
-    protected double time = 0.00;
+
 
     public HeadView(Context context, AttributeSet attributes) {
         super(context, attributes);
@@ -68,7 +62,7 @@ class HeadView extends View {
     }
 
     protected void onDraw(Canvas canvas){
-        canvas.drawBitmap(canvasBitmap, 0,0, canvasPaint);
+       // canvas.drawBitmap(canvasBitmap, 0,0, canvasPaint);
 
         // resets the path to middle to remove weird intialization bug
 //        double x = getWidth() / 2;
