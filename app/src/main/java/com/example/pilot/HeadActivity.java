@@ -17,17 +17,23 @@ import java.util.ArrayList;
 public class HeadActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mSensor;
+    private TextView instructions;
+
+    private boolean getMidpoint;
+    private float midX;
+    private float midY;
+
     private float xDraw;
     private float yDraw;
     private boolean testStarted = false;
-    private float Athreshold;
-    private float Bthreshold;
-    private float Cthreshold;
-    private float Dthreshold;
+    private float aThreshold;
+    private float bThreshold;
+    private float cThreshold;
+    private float dThreshold;
     private String score;
-    public BullseyeDrawView bullseyeView;
+    public HeadView headView;
     private ArrayList<Double> distancesArray = new ArrayList<Double>();
-    private TextView scoreView;
+//    private TextView scoreView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +41,17 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_head);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        bullseyeView = (BullseyeDrawView) findViewById(R.id.bullseyedrawing);
-        Athreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 16;
-        Bthreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 8;
-        Cthreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 4;
-        Dthreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
-        scoreView = (TextView) findViewById(R.id.textView3);
-        scoreView.setVisibility(View.GONE);
+        instructions.append("\n For this test you will place the phone on top on your head and it will record your sway. \n" +
+                "When you start place the phone on your head and when you hear the beep stay as still as possible until you hear a second beep.\n" +
+                "When you hit ok, you will have five seconds to place the phone on your head before the test starts");
+        headView = (HeadView) findViewById(R.id.headDraw);
+        aThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 16;
+        bThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 8;
+        cThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 4;
+        dThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
+        getMidpoint = true;
+//        scoreView = (TextView) findViewById(R.id.textView3);
+//        scoreView.setVisibility(View.GONE);
 
     }
 
@@ -55,21 +65,23 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
         if(testStarted) {
             float xAxis = event.values[0];
             float yAxis = event.values[1];
+            if(getMidpoint) {
+                midX = xAxis;
+                midY = yAxis;
+            }
 
             //setting x draw coordinate
-            xDraw = ((bullseyeView.getX() + bullseyeView.getWidth()) / 2) + (-xAxis * (Resources.getSystem().getDisplayMetrics().widthPixels / 15));
+            xDraw = ((headView.getX() + headView.getWidth()) / 2) + (-xAxis * (Resources.getSystem().getDisplayMetrics().widthPixels / 15));
 
             //setting y draw coordinate
-            yDraw = ((bullseyeView.getY() + bullseyeView.getHeight()) / 2) + (yAxis * (Resources.getSystem().getDisplayMetrics().heightPixels / 15));
+            yDraw = ((headView.getY() + headView.getHeight()) / 2) + (yAxis * (Resources.getSystem().getDisplayMetrics().heightPixels / 15));
 
-            //       System.out.println("xdraw: " + xDraw + " y draw: " + yDraw);
-            //       bullseyeView.tracePath.moveTo(xDraw,yDraw);
+
             System.out.println("x axis: " + xAxis + " y axis: " + yAxis);
 
 
-//            bullseyeView.tracePath.moveTo(xDraw,yDraw);
-            bullseyeView.tracePath.lineTo(xDraw, yDraw);
-            bullseyeView.invalidate();
+            headView.tracePath.lineTo(xDraw, yDraw);
+            headView.invalidate();
         }
     }
 
@@ -78,8 +90,8 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     private double getDistanceFromCenter(float x, float y){
         double xTemp = (double) x;
         double yTemp = (double) y;
-        double xCenter = (bullseyeView.getX() + bullseyeView.getWidth()) / 2;
-        double yCenter = (bullseyeView.getY() + bullseyeView.getHeight()) / 2;
+        double xCenter = (headView.getX() + headView.getWidth()) / 2;
+        double yCenter = (headView.getY() + headView.getHeight()) / 2;
         return Math.sqrt(Math.pow(xCenter - xTemp,2) + Math.pow(yCenter - yTemp,2));
     }
 
@@ -102,16 +114,16 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
             sum += distancesArray.get(i);
         }
         double avg = sum/distancesArray.size();
-        if(avg > Dthreshold){
+        if(avg > dThreshold){
             return "F";
         }
-        else if(avg > Cthreshold && avg <= Dthreshold){
+        else if(avg > cThreshold && avg <= dThreshold){
             return "D";
         }
-        else if(avg > Bthreshold && avg <= Cthreshold){
+        else if(avg > bThreshold && avg <= cThreshold){
             return "C";
         }
-        else if(avg > Athreshold && avg <= Bthreshold){
+        else if(avg > aThreshold && avg <= bThreshold){
             return "B";
         }
         else{
@@ -135,8 +147,8 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
                     testStarted = false;
                     String finishScore = getScore(distancesArray);
                     System.out.println(finishScore);
-                    scoreView.setText("Score: " + finishScore);
-                    scoreView.setVisibility(View.VISIBLE);
+//                    scoreView.setText("Score: " + finishScore);
+//                    scoreView.setVisibility(View.VISIBLE);
 
                 }
             }.start();
