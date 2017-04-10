@@ -24,6 +24,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     private boolean getMidpoint;
     private float midX;
     private float midY;
+    private float yAxisCenter;
 
     private float xDraw;
     private float yDraw;
@@ -66,24 +67,17 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     public final void onSensorChanged(SensorEvent event) {
         if(testStarted) {
             float xAxis = event.values[0];
-            float yAxis = event.values[1];
             if(getMidpoint) {
                 midX = xAxis;
-                midY = yAxis;
                 getMidpoint = false;
             }
 
             //setting x draw coordinate
             xDraw = ((headView.getX() + headView.getWidth()) / 2) + (-xAxis * (Resources.getSystem().getDisplayMetrics().widthPixels / 15));
 
-            //setting y draw coordinate
-            yDraw = ((headView.getY() + headView.getHeight()) / 2) + (yAxis * (Resources.getSystem().getDisplayMetrics().heightPixels / 15));
 
 
-            System.out.println("x axis: " + xAxis + " y axis: " + yAxis);
-
-
-//            headView.tracePath.lineTo(xDraw, yDraw);
+           headView.tracePath.lineTo(xDraw, yAxisCenter);
             headView.invalidate();
         }
     }
@@ -136,11 +130,11 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
 
     public void startHeadTest(View view){
         float xCenter = (headView.getX() + headView.getWidth()) / 2;
-        float yCenter = (headView.getY() + headView.getHeight()) / 2;
+        yAxisCenter = (headView.getY() + headView.getHeight()) / 2;
 
         if(!testStarted){
             testStarted = true;
-            headView.tracePath.moveTo(xCenter, yCenter);
+            headView.tracePath.moveTo(xCenter, yAxisCenter);
             instructions.setVisibility(View.GONE);
             button.setVisibility(View.GONE);
 
