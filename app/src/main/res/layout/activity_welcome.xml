@@ -31,17 +31,17 @@
         android:layout_alignParentStart="true" />
 
     <Button
-        android:text="@string/level"
+        android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="levelTest"
-        android:id="@+id/button3"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:background="@android:color/holo_red_light"
-        android:layout_below="@+id/button2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="9dp" />
+        android:layout_below="@+id/button2"
+        android:layout_marginTop="9dp"
+        android:background="?attr/colorControlActivated"
+        android:onClick="levelTest"
+        android:text="@string/level"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
     <Button
         android:id="@+id/bubble_btn"
