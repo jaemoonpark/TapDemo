@@ -85,12 +85,12 @@
         android:id="@+id/button5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_light"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/bubble_btn"
+        android:layout_marginTop="22dp"
+        android:background="@android:color/holo_blue_dark"
         android:onClick="armTest"
         android:text="@string/arm"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:layout_below="@+id/bubble_btn"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="22dp" />
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
 </RelativeLayout>
