@@ -70,6 +70,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
             if(getMidpoint) {
                 midX = xAxis;
                 midY = yAxis;
+                getMidpoint = false;
             }
 
             //setting x draw coordinate
@@ -82,7 +83,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
             System.out.println("x axis: " + xAxis + " y axis: " + yAxis);
 
 
-            headView.tracePath.lineTo(xDraw, yDraw);
+//            headView.tracePath.lineTo(xDraw, yDraw);
             headView.invalidate();
         }
     }
@@ -134,10 +135,15 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void startHeadTest(View view){
+        float xCenter = (headView.getX() + headView.getWidth()) / 2;
+        float yCenter = (headView.getY() + headView.getHeight()) / 2;
+
         if(!testStarted){
             testStarted = true;
+            headView.tracePath.moveTo(xCenter, yCenter);
             instructions.setVisibility(View.GONE);
             button.setVisibility(View.GONE);
+
             new CountDownTimer(10000, 500){
                 @Override
                 public void onTick(long millisUntilFinished){

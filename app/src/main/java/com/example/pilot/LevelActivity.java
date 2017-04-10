@@ -74,6 +74,7 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
 //            bullseyeView.tracePath.moveTo(xDraw,yDraw);
             bullseyeView.tracePath.lineTo(xDraw, yDraw);
             bullseyeView.invalidate();
+            bullseyeView.setPaintColor();
         }
     }
 
@@ -124,8 +125,13 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     }
 
     public void startBullseyeTest(View view){
+        float xCenter = (bullseyeView.getX() + bullseyeView.getWidth()) / 2;
+        float yCenter = (bullseyeView.getY() + bullseyeView.getHeight()) / 2;
+
+
         if(!testStarted){
             testStarted = true;
+            bullseyeView.tracePath.moveTo(xCenter, yCenter);
             new CountDownTimer(10000, 500){
                 @Override
                 public void onTick(long millisUntilFinished){
