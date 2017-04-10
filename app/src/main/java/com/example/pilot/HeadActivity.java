@@ -23,11 +23,9 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
 
     private boolean getMidpoint;
     private float midX;
-    private float midY;
     private float yAxisCenter;
 
     private float xDraw;
-    private float yDraw;
     private boolean testStarted = false;
     private float aThreshold;
     private float bThreshold;
@@ -36,7 +34,6 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     private String score;
     public HeadView headView;
     private ArrayList<Double> distancesArray = new ArrayList<Double>();
-//    private TextView scoreView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +50,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
         cThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 4;
         dThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
         getMidpoint = true;
-//        scoreView = (TextView) findViewById(R.id.textView3);
-//        scoreView.setVisibility(View.GONE);
+
 
     }
 
@@ -87,9 +83,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     private double getDistanceFromCenter(float x, float y){
         double xTemp = (double) x;
         double yTemp = (double) y;
-        double xCenter = (headView.getX() + headView.getWidth()) / 2;
-        double yCenter = (headView.getY() + headView.getHeight()) / 2;
-        return Math.sqrt(Math.pow(xCenter - xTemp,2) + Math.pow(yCenter - yTemp,2));
+        return Math.sqrt(Math.pow(midX - xTemp,2) + Math.pow(yAxisCenter - yTemp,2));
     }
 
     @Override
@@ -141,7 +135,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
             new CountDownTimer(10000, 500){
                 @Override
                 public void onTick(long millisUntilFinished){
-                    double distance = getDistanceFromCenter(xDraw, yDraw);
+                    double distance = getDistanceFromCenter(xDraw, yAxisCenter);
                     distancesArray.add(distance);
 
                 }
@@ -149,10 +143,8 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
                 @Override
                 public void onFinish() {
                     testStarted = false;
-                    String finishScore = getScore(distancesArray);
-                    System.out.println(finishScore);
-//                    scoreView.setText("Score: " + finishScore);
-//                    scoreView.setVisibility(View.VISIBLE);
+                    score = getScore(distancesArray);
+                    System.out.println(score);
 
                 }
             }.start();
