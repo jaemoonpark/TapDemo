@@ -71,5 +71,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public void headTest(View v) {
         Intent intent = new Intent(this, HeadActivity.class);
+        startActivity(intent);
     }
 }

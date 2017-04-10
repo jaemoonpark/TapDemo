@@ -8,5 +8,8 @@
     <string name="title">Select Your Test</string>
     <string name="arm">Arm Test</string>
     <string name="head">Head Test</string>
+    <string name="instructions">For this test you will place the phone on top on your head and it will record your sway.
+        \n\nWhen you start, place the phone on your head and when you hear the beep stay as still as possible until you hear a second beep indicating the test is done.
+        \n\nWhen you hit OK, you will have five seconds to place the phone on your head before the test starts and the first beep sounds."</string>
 
 </resources>

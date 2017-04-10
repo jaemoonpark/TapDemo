@@ -97,6 +97,7 @@ public class BubbleView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         double touchX = event.getX();
         double touchY = event.getY();
+        Log.v("test","Hello");
 
 
         if(isWithin(getCurrentCircleX(), touchX) && isWithin(getCurrentCircleY(), touchY)) {

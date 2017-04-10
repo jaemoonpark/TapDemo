@@ -17,6 +17,7 @@ public class BubbleActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.textView);
 
 
+
     }
 
     protected void removeIntro() {
