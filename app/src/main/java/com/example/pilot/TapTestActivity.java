@@ -1,7 +1,6 @@
 package com.example.pilot;
 
 
-import com.example.sheets436.Sheets;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -172,13 +171,7 @@ public class TapTestActivity extends AppCompatActivity  {
 
 
     private void sendToSheets() {
-        Intent sheets = new Intent(this, Sheets.class);
-        String myUserId = "t01p01";
-        float avg_tapping_time = 72.4f;
 
-        sheets.putExtra(Sheets.EXTRA_TYPE, Sheets.UpdateType.LH_TAP.ordinal());
-        sheets.putExtra(Sheets.EXTRA_USER, myUserId);
-        sheets.putExtra(Sheets.EXTRA_VALUE, avg_tapping_time);
     }
 
 }

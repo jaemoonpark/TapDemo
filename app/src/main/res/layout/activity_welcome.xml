@@ -44,17 +44,17 @@
         android:layout_marginTop="9dp" />
 
     <Button
-        android:text="@string/bubble"
+        android:id="@+id/bubble_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="bubbleTest"
-        android:id="@+id/bubble_btn"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:background="@android:color/holo_red_light"
-        android:layout_below="@+id/button3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="8dp" />
+        android:layout_below="@+id/button3"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/holo_blue_bright"
+        android:onClick="bubbleTest"
+        android:text="@string/bubble"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
     <Button
         android:text="@string/spiral"

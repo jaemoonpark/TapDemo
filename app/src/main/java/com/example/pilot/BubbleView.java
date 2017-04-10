@@ -13,7 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.sheets436.Sheets;
+
 
 import java.util.Random;
 
@@ -72,14 +72,7 @@ public class BubbleView extends View {
     }
 
     private void sendToSheets() {
-        Intent sheets = new Intent(getContext(), Sheets.class);
-        String myUserId = "t01p01";
 
-
-        sheets.putExtra(Sheets.EXTRA_TYPE, Sheets.UpdateType.LH_POP.ordinal());
-        System.out.println("LHPOP");
-        sheets.putExtra(Sheets.EXTRA_USER, myUserId);
-        sheets.putExtra(Sheets.EXTRA_VALUE, averageTime);
     }
 
     private double getCurrentCircleX(){
