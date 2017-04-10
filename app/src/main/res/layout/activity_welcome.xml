@@ -10,12 +10,12 @@
         android:text="@string/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="19dp"
         android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large.Inverse"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="match_parent"
@@ -70,16 +70,27 @@
         android:layout_alignParentStart="true" />
 
     <Button
-        android:text="@string/arm"
+        android:text="@string/head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="armTest"
-        android:id="@+id/button5"
+        android:onClick="headTest"
+        android:id="@+id/button6"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:background="@android:color/holo_red_light"
-        android:layout_marginTop="9dp"
-        android:layout_below="@+id/bubble_btn"
-        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/button5"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_light"
+        android:onClick="armTest"
+        android:text="@string/arm"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_below="@+id/bubble_btn"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="22dp" />
 
 </RelativeLayout>

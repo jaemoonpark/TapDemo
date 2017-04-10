@@ -7,5 +7,6 @@
     <string name="bubble">Bubble Test</string>
     <string name="title">Select Your Test</string>
     <string name="arm">Arm Test</string>
+    <string name="head">Head Test</string>
 
 </resources>
