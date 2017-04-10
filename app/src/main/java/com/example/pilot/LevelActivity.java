@@ -56,8 +56,6 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
-        // The light sensor returns a single value.
-        // Many sensors return 3 values, one for each axis.
         if(testStarted) {
             float xAxis = event.values[0];
             float yAxis = event.values[1];
