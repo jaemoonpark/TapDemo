@@ -2,11 +2,14 @@ package com.example.pilot;
 
 
 
+import android.app.Activity;
 import android.content.Intent;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,17 +18,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import cmsc436.tharri16.googlesheetshelper.CMSC436Sheet;
 
 
-
-
-public class TapTestActivity extends AppCompatActivity  {
+public class TapTestActivity extends AppCompatActivity implements CMSC436Sheet.Host  {
     public boolean startTest = false;
     public boolean leftHandTest = true;
     public boolean canTapScreen = true;
     public Integer leftHand = 0;
     public Integer rightHand = 0;
     public Integer timeCount = 10;
+    private CMSC436Sheet sheet;
+
 
     Bundle currUser;
     ArrayList<Integer> tapTestResults;
@@ -85,6 +89,7 @@ public class TapTestActivity extends AppCompatActivity  {
                             System.out.println("Average Hand Score : " + averageScore);
                             textViewToChange.setText("Results: \n Left Hand: " + leftHand.toString() + "\n Right Hand: " + rightHand.toString());
                             textViewToChange2.setText("Done");
+                            sendResultToSheet();
                             btn.setVisibility(View.VISIBLE);
                             canTapScreen = false;
                             //sendToSheets();
@@ -171,14 +176,51 @@ public class TapTestActivity extends AppCompatActivity  {
     }
 
 
-//    private void sendToSheets() {
-//        Intent sheets = new Intent(this, Sheets.class);
-//        String myUserId = "t01p01";
-//        float avg_tapping_time = 72.4f;
-//
-//        sheets.putExtra(Sheets.EXTRA_TYPE, Sheets.UpdateType.LH_TAP.ordinal());
-//        sheets.putExtra(Sheets.EXTRA_USER, myUserId);
-//        sheets.putExtra(Sheets.EXTRA_VALUE, avg_tapping_time);
-//    }
+    private void sendResultToSheet(){
+        sheet = new CMSC436Sheet(this, getString(R.string.app_name), getString(R.string.CMSC436Sheet_spreadsheet_id));
+        sheet.writeData(CMSC436Sheet.TestType.LH_TAP, "t01p01", leftHand);
+        sheet.writeData(CMSC436Sheet.TestType.RH_TAP, "t01p01", rightHand);
+    }
+    /* neccessary? */
+    @Override
+    public void onRequestPermissionsResult (int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        sheet.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        sheet.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public int getRequestCode(CMSC436Sheet.Action action) {
+        switch (action) {
+            case REQUEST_ACCOUNT_NAME:
+                return 2;
+            case REQUEST_AUTHORIZATION:
+                return 2;
+            case REQUEST_PERMISSIONS:
+                return 2;
+            case REQUEST_PLAY_SERVICES:
+                return 2;
+            default:
+                return -1; // boo java doesn't know we exhausted the enum
+        }
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public void notifyFinished(Exception e) {
+        if (e != null) {
+            throw new RuntimeException(e); // just to see the exception easily in logcat
+        }
+
+        Log.i(getClass().getSimpleName(), "Done");
+    }
 
 }

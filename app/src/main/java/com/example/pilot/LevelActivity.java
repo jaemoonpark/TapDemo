@@ -165,8 +165,8 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
 
     private void sendResultToSheet(){
         sheet = new CMSC436Sheet(this, getString(R.string.app_name), getString(R.string.CMSC436Sheet_spreadsheet_id));
-        sheet.writeData(CMSC436Sheet.TestType.LH_TAP, "fuzzy", CMSC436Sheet.unixToSheetsEpoch(System.currentTimeMillis()));
-        sheet.writeData(CMSC436Sheet.TestType.LH_TAP, "bunny", 1.23f);
+        sheet.writeData(CMSC436Sheet.TestType.LH_TAP, "fuzzssy", CMSC436Sheet.unixToSheetsEpoch(System.currentTimeMillis()));
+        sheet.writeData(CMSC436Sheet.TestType.LH_TAP, "bunnssy", 1.23f);
     }
     /* neccessary? */
     @Override
