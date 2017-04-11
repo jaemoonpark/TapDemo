@@ -33,6 +33,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     private float yAxisCenter;
 
     private float xDraw;
+    private float yDraw;
     private boolean testStarted = false;
     private float aThreshold;
     private float bThreshold;
@@ -77,6 +78,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     public final void onSensorChanged(SensorEvent event) {
         if(testStarted) {
             float xAxis = event.values[0];
+            float yAxis = event.values[1];
             if(getMidpoint) {
                 midX = xAxis;
                 getMidpoint = false;
@@ -84,10 +86,11 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
 
             //setting x draw coordinate
             xDraw = ((headView.getX() + headView.getWidth()) / 2) + (-xAxis * (Resources.getSystem().getDisplayMetrics().widthPixels / 15));
+            yDraw = ((headView.getY() + headView.getHeight()) / 2) + (yAxis * (Resources.getSystem().getDisplayMetrics().heightPixels / 15));
 
 
 
-            headView.tracePath.lineTo(xDraw, yAxisCenter);
+            headView.tracePath.lineTo(xDraw, yDraw);
             headView.invalidate();
         }
     }
@@ -150,7 +153,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
             new CountDownTimer(10000, 500) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    double distance = getDistanceFromCenter(xDraw, yAxisCenter);
+                    double distance = getDistanceFromCenter(xDraw, yDraw);
                     distancesArray.add(distance);
                 }
                 @Override
