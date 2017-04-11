@@ -259,6 +259,7 @@ public class SpiralView extends View {
         int score = s.intValue();
         Log.v("score",Integer.toString(score));
         xxx.runFromFragment(score, rightHand);
+        rightHand = false;
         finishTest++;
 
         return score;
