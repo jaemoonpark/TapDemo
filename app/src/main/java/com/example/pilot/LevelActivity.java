@@ -111,26 +111,26 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         mSensorManager.unregisterListener(this);
     }
 
-    private String getScore(ArrayList<Double> distancesArray){
+    private double getScore(ArrayList<Double> distancesArray){
         double sum = 0;
         for(int i = 0; i < distancesArray.size(); i++){
             sum += distancesArray.get(i);
         }
         avg = sum/distancesArray.size();
         if(avg > Dthreshold){
-            return "F";
+            return avg;
         }
         else if(avg > Cthreshold && avg <= Dthreshold){
-            return "D";
+            return avg;
         }
         else if(avg > Bthreshold && avg <= Cthreshold){
-            return "C";
+            return avg;
         }
         else if(avg > Athreshold && avg <= Bthreshold){
-            return "B";
+            return avg;
         }
         else{
-            return "A";
+            return avg;
         }
     }
 
@@ -155,7 +155,7 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
                     @Override
                     public void onFinish() {
                         testStarted = false;
-                        String finishScore = getScore(distancesArray);
+                        double finishScore = getScore(distancesArray);
                         System.out.println(finishScore);
 
                         scoreView.setText("Score: " + finishScore);
