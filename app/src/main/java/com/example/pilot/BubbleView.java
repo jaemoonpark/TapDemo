@@ -70,7 +70,7 @@ public class BubbleView extends View {
         }
     }
 
-
+    //comment 
     private double getCurrentCircleX(){
         return circleX;
     }
