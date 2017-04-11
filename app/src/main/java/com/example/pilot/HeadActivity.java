@@ -78,7 +78,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     public final void onSensorChanged(SensorEvent event) {
         if(testStarted) {
             float xAxis = event.values[0];
-            float yAxis = event.values[1];
+            float yAxis = event.values[2];
             if(getMidpoint) {
                 midX = xAxis;
                 getMidpoint = false;
