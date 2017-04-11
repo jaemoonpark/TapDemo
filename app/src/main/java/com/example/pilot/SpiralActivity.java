@@ -276,7 +276,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
 
     /**
      * Attempt to resolve a missing, out-of-date, invalid or disabled Google
-     * Play Services installation via a user dialog, if possible.
+     * Play Services installation via a user dialog, if possif(!finishTest && rightHand){ible.
      */
     private void acquireGooglePlayServices() {
         Log.v("score","Helllo from agps");

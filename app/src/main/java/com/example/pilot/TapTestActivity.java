@@ -175,7 +175,6 @@ public class TapTestActivity extends AppCompatActivity implements CMSC436Sheet.H
         return -1;
     }
 
-
     private void sendResultToSheet(){
         sheet = new CMSC436Sheet(this, getString(R.string.app_name), getString(R.string.CMSC436Sheet_spreadsheet_id));
         sheet.writeData(CMSC436Sheet.TestType.LH_TAP, "t01p01", leftHand);

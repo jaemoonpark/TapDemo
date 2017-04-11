@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -32,10 +33,13 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
     private float Bthreshold;
     private float Cthreshold;
     private float Dthreshold;
+    private double avg;
+    private boolean rightHand = true;
     private String score;
     public BullseyeDrawView bullseyeView;
     private ArrayList<Double> distancesArray = new ArrayList<Double>();
     private CMSC436Sheet sheet;
+    private int didFinish = 0;
 
     private TextView scoreView;
 
@@ -112,7 +116,7 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
         for(int i = 0; i < distancesArray.size(); i++){
             sum += distancesArray.get(i);
         }
-        double avg = sum/distancesArray.size();
+        avg = sum/distancesArray.size();
         if(avg > Dthreshold){
             return "F";
         }
@@ -132,32 +136,36 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
 
 
     public void startBullseyeTest(View view){
-        float xCenter = (bullseyeView.getX() + bullseyeView.getWidth()) / 2;
-        float yCenter = (bullseyeView.getY() + bullseyeView.getHeight()) / 2;
+        if(didFinish !=2) {
+            float xCenter = (bullseyeView.getX() + bullseyeView.getWidth()) / 2;
+            float yCenter = (bullseyeView.getY() + bullseyeView.getHeight()) / 2;
 
 
-        if(!testStarted){
-            testStarted = true;
-            bullseyeView.tracePath.moveTo(xCenter, yCenter);
-            new CountDownTimer(10000, 500){
-                @Override
-                public void onTick(long millisUntilFinished){
-                    double distance = getDistanceFromCenter(xDraw, yDraw);
-                    distancesArray.add(distance);
+            if (!testStarted) {
+                testStarted = true;
+                bullseyeView.tracePath.moveTo(xCenter, yCenter);
+                new CountDownTimer(10000, 500) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        double distance = getDistanceFromCenter(xDraw, yDraw);
+                        distancesArray.add(distance);
 
-                }
+                    }
 
-                @Override
-                public void onFinish() {
-                    testStarted = false;
-                    String finishScore = getScore(distancesArray);
-                    System.out.println(finishScore);
-                    scoreView.setText("Score: " + finishScore);
-                    sendResultToSheet();
-                    scoreView.setVisibility(View.VISIBLE);
+                    @Override
+                    public void onFinish() {
+                        testStarted = false;
+                        String finishScore = getScore(distancesArray);
+                        System.out.println(finishScore);
 
-                }
-            }.start();
+                        scoreView.setText("Score: " + finishScore);
+                        sendResultToSheet();
+                        didFinish++;
+                        scoreView.setVisibility(View.VISIBLE);
+                        bullseyeView.resetCanvas();
+                    }
+                }.start();
+            }
         }
 
     }
@@ -165,8 +173,12 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
 
     private void sendResultToSheet(){
         sheet = new CMSC436Sheet(this, getString(R.string.app_name), getString(R.string.CMSC436Sheet_spreadsheet_id));
-        sheet.writeData(CMSC436Sheet.TestType.LH_TAP, "fuzzssy", CMSC436Sheet.unixToSheetsEpoch(System.currentTimeMillis()));
-        sheet.writeData(CMSC436Sheet.TestType.LH_TAP, "bunnssy", 1.23f);
+        if(rightHand){
+            sheet.writeData(CMSC436Sheet.TestType.RH_LEVEL, "t01p01", (float) avg);
+            rightHand = false;
+        }else{
+            sheet.writeData(CMSC436Sheet.TestType.LH_LEVEL, "t01p01", (float) avg);
+        }
     }
     /* neccessary? */
     @Override
