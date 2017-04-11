@@ -131,7 +131,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
         float xCenter = (headView.getX() + headView.getWidth()) / 2;
         yAxisCenter = (headView.getY() + headView.getHeight()) / 2;
 
-        if(!testStarted){
+        if(!testStarted) {
             testStarted = true;
             headView.tracePath.moveTo(xCenter, yAxisCenter);
             instructions.setVisibility(View.GONE);
@@ -139,6 +139,11 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
             //Play start test sound byte
             startTest.start();
 
+
+            while (startTest.isPlaying()){
+                 //Do nothing
+            }
+            startTest.release();
 
             new CountDownTimer(10000, 500){
                 @Override
@@ -152,12 +157,15 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
                 public void onFinish() {
                     //Play test complete sound
                     testComplete.start();
+
+                    while(testComplete.isPlaying()){
+                        //Do nothing
+                    }
+                    testComplete.release();
                     testStarted = false;
                     score = getScore(distancesArray);
                     System.out.println(score);
 
-
-                    testComplete.release();
 
                 }
             }.start();
