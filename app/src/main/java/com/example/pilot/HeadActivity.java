@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,6 +36,9 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     public HeadView headView;
     private ArrayList<Double> distancesArray = new ArrayList<Double>();
 
+    private MediaPlayer startTest;
+    private MediaPlayer testComplete;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +55,8 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
         dThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
         getMidpoint = true;
 
-
+        startTest = MediaPlayer.create(this,  R.raw.start_test);
+        testComplete = MediaPlayer.create(this, R.raw.test_complete);
     }
 
     @Override
@@ -126,11 +131,19 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
         float xCenter = (headView.getX() + headView.getWidth()) / 2;
         yAxisCenter = (headView.getY() + headView.getHeight()) / 2;
 
-        if(!testStarted){
+        if(!testStarted) {
             testStarted = true;
             headView.tracePath.moveTo(xCenter, yAxisCenter);
             instructions.setVisibility(View.GONE);
             button.setVisibility(View.GONE);
+            //Play start test sound byte
+            startTest.start();
+
+
+            while (startTest.isPlaying()){
+                 //Do nothing
+            }
+            startTest.release();
 
             new CountDownTimer(10000, 500){
                 @Override
@@ -142,9 +155,17 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
 
                 @Override
                 public void onFinish() {
+                    //Play test complete sound
+                    testComplete.start();
+
+                    while(testComplete.isPlaying()){
+                        //Do nothing
+                    }
+                    testComplete.release();
                     testStarted = false;
                     score = getScore(distancesArray);
                     System.out.println(score);
+
 
                 }
             }.start();

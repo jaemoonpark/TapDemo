@@ -40,10 +40,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cmsc436.tharri16.googlesheetshelper.CMSC436Sheet;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class SpiralActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
+public class SpiralActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, CMSC436Sheet.Host{
 
     public static TextView textViewObj;
 
@@ -58,7 +59,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {SheetsScopes.SPREADSHEETS};
     private int score;
-
+    private CMSC436Sheet sheet;
     final private static String spreadsheetID = "1areTOSgIUjlvTHgKAiMljWJJ7fIUludIkd0emcY0flA";
 
     @Override
@@ -71,13 +72,67 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
 
     }
 
-    protected void runFromFragment(int score){
+    protected void runFromFragment(int score, boolean rightHand){
         mCredential = GoogleAccountCredential.usingOAuth2(
                 this, Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
         this.score = score;
-        getResultsFromApi();
+        sendResultToSheet(rightHand);
+       // getResultsFromApi();
+
     }
+
+    private void sendResultToSheet(boolean rightHand){
+        sheet = new CMSC436Sheet(this, getString(R.string.app_name), getString(R.string.CMSC436Sheet_spreadsheet_id));
+        if(rightHand) {
+            sheet.writeData(CMSC436Sheet.TestType.RH_SPIRAL, "t01p01", score);
+        }else{
+            sheet.writeData(CMSC436Sheet.TestType.LH_SPIRAL, "t01p01", score);
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        sheet.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public int getRequestCode(CMSC436Sheet.Action action) {
+        switch (action) {
+            case REQUEST_ACCOUNT_NAME:
+                return 2;
+            case REQUEST_AUTHORIZATION:
+                return 2;
+            case REQUEST_PERMISSIONS:
+                return 2;
+            case REQUEST_PLAY_SERVICES:
+                return 2;
+            default:
+                return -1; // boo java doesn't know we exhausted the enum
+        }
+    }
+
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public void notifyFinished(Exception e) {
+        if (e != null) {
+            throw new RuntimeException(e); // just to see the exception easily in logcat
+        }
+
+        Log.i(getClass().getSimpleName(), "Done");
+    }
+
+
+
+
+
+
 
     /**
      * Attempt to call the API, after verifying that all the preconditions are
@@ -154,43 +209,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
      * @param data        Intent (containing result data) returned by incoming
      *                    activity result.
      */
-    @Override
-    protected void onActivityResult(
-            int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_GOOGLE_PLAY_SERVICES:
-                if (resultCode != Activity.RESULT_OK) {
-                    Toast.makeText(this, "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    getResultsFromApi();
-                }
-                break;
-            case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == Activity.RESULT_OK && data != null &&
-                        data.getExtras() != null) {
-                    String accountName =
-                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    if (accountName != null) {
-                        SharedPreferences settings =
-                                getPreferences(Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(PREF_ACCOUNT_NAME, accountName);
-                        editor.apply();
-                        mCredential.setSelectedAccountName(accountName);
-                        getResultsFromApi();
-                    }
-                }
-                break;
-            case REQUEST_AUTHORIZATION:
-                if (resultCode == Activity.RESULT_OK) {
-                    getResultsFromApi();
-                }
-                break;
-        }
-    }
+
 
     /**
      * Respond to requests for permissions at runtime for API 23 and above.
@@ -201,14 +220,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
      * @param grantResults The grant results for the corresponding permissions
      *                     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
      */
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(
-                requestCode, permissions, grantResults, this);
-    }
+
 
     /**
      * Callback for when a permission is granted using the EasyPermissions
@@ -264,7 +276,7 @@ public class SpiralActivity extends AppCompatActivity implements EasyPermissions
 
     /**
      * Attempt to resolve a missing, out-of-date, invalid or disabled Google
-     * Play Services installation via a user dialog, if possible.
+     * Play Services installation via a user dialog, if possif(!finishTest && rightHand){ible.
      */
     private void acquireGooglePlayServices() {
         Log.v("score","Helllo from agps");

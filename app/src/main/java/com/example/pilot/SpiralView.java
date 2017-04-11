@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.net.ConnectivityManager;
@@ -71,6 +72,8 @@ public class SpiralView extends View {
     protected double b = .15;
     protected int horizontalMovement = 600;
     protected int verticalMovement = 800;
+    protected boolean rightHand = true;
+    protected int finishTest = 0;
     protected SpiralActivity xxx;
 
     public SpiralView(Context context, AttributeSet attributes) {
@@ -81,6 +84,16 @@ public class SpiralView extends View {
 
     protected void createSpiral(){
         //creates model spiral, we will use the same equation to score
+        paint.setColor(RED);
+
+        //These will make drawing smoother
+        paint.setAntiAlias(true);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+
+        //Sets width of brush and stroke instead of fill
+        paint.setStrokeWidth(50);
+        paint.setStyle(Paint.Style.STROKE);
         double seg = (whole * Math.PI)/100;
         double t = 0.0;
         int x;
@@ -94,6 +107,8 @@ public class SpiralView extends View {
         }
         drawCanvas.drawPath(tracePath,paint);
         tracePath.reset();
+        paint.setColor(BLUE);
+        paint.setStrokeWidth(25);
     }
 
 
@@ -151,69 +166,73 @@ public class SpiralView extends View {
         float touchX = event.getX();
         float touchY = event.getY();
 
+        if(finishTest != 2) {
+            switch (event.getAction()) {
+                //Captures what happens when your finger MOVES across the screen
+                case MotionEvent.ACTION_MOVE:
 
-        switch(event.getAction()){
-            //Captures what happens when your finger MOVES across the screen
-            case MotionEvent.ACTION_MOVE:
+                    tracePath.lineTo(touchX, touchY);
+                    xPath.add(touchX);
+                    yPath.add(touchY);
+                    break;
 
-                tracePath.lineTo(touchX,touchY);
-                xPath.add(touchX);
-                yPath.add(touchY);
-                break;
+                //Captures what happens when your finger is pressed DOWN on the screen
+                case MotionEvent.ACTION_DOWN:
+                    tracePath.moveTo(touchX, touchY);
+                    startTime = System.currentTimeMillis();
+                    xPath.add(touchX);
+                    yPath.add(touchY);
+                    break;
 
-            //Captures what happens when your finger is pressed DOWN on the screen
-            case MotionEvent.ACTION_DOWN:
-                tracePath.moveTo(touchX,touchY);
-                startTime = System.currentTimeMillis();
-                xPath.add(touchX);
-                yPath.add(touchY);
-                break;
+                //Captures what happens when your finger is lifted UP from the screen
+                case MotionEvent.ACTION_UP:
 
-            //Captures what happens when your finger is lifted UP from the screen
-            case MotionEvent.ACTION_UP:
-                drawCanvas.drawPath(tracePath,paint);
-                tracePath.reset();
-                //asking for permission to save
-                //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                //saving screen here
-                //loading view
-                View spiralView = findViewById(R.id.drawing);
-                spiralView.setDrawingCacheEnabled(true);
-                Bitmap spiralViewBitMap = spiralView.getDrawingCache();
-                File postSpiralImageFile = new File(Environment.getExternalStorageDirectory() + "/spiral/");
-                postSpiralImageFile.mkdirs();
-                File file = new File(postSpiralImageFile, "spiral" + Long.toString(System.currentTimeMillis()) + ".png");
+                    drawCanvas.drawPath(tracePath, paint);
+                    tracePath.reset();
+                    //asking for permission to save
+                    //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    //saving screen here
+                    //loading view
+                    View spiralView = findViewById(R.id.drawing);
+                    spiralView.setDrawingCacheEnabled(true);
+                    Bitmap spiralViewBitMap = spiralView.getDrawingCache();
+                    File postSpiralImageFile = new File(Environment.getExternalStorageDirectory() + "/spiral/");
+                    postSpiralImageFile.mkdirs();
+                    File file = new File(postSpiralImageFile, "spiral" + Long.toString(System.currentTimeMillis()) + ".png");
 
-                //this line of code simply saves directly to gallery
-                MediaStore.Images.Media.insertImage(getContext().getContentResolver(), spiralViewBitMap,"spiral" + Long.toString(System.currentTimeMillis()) + ".png", "after spiral draw test");
-                //creating new file here
-                try
-                {
-                    //starting output stream using spiral image file
-                    //postSpiralImageFile.createNewFile();
-                    FileOutputStream outputStream = new FileOutputStream(file);
-                    spiralViewBitMap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-                    outputStream.close();
-                    System.out.println("did work?");
-                }
-                catch (Throwable exception){
-                    System.out.println("something went wrong :(");
-                    exception.printStackTrace();
-                }
-                stopTime = System.currentTimeMillis();
-                time = (stopTime - startTime);
-                time = time /1000;
-                SpiralActivity.textViewObj.setText(Double.toString(time) + " Seconds");
-                Log.v("myTime",Double.toString(time) + "Seconds");
-                int score = scoreSpiral();
-                break;
-            default:
-                return false;
+                    //this line of code simply saves directly to gallery
+                    MediaStore.Images.Media.insertImage(getContext().getContentResolver(), spiralViewBitMap, "spiral" + Long.toString(System.currentTimeMillis()) + ".png", "after spiral draw test");
+                    //creating new file here
+                    try {
+                        //starting output stream using spiral image file
+                        //postSpiralImageFile.createNewFile();
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        spiralViewBitMap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                        outputStream.close();
+                        System.out.println("did work?");
+                    } catch (Throwable exception) {
+                        System.out.println("something went wrong :(");
+                        exception.printStackTrace();
+                    }
+                    stopTime = System.currentTimeMillis();
+                    time = (stopTime - startTime);
+                    time = time / 1000;
+                    SpiralActivity.textViewObj.setText(Double.toString(time) + " Seconds");
+                    Log.v("myTime", Double.toString(time) + "Seconds");
+                    int score = scoreSpiral();
+                    System.out.println(score);
+
+                    drawCanvas.drawColor(Color.WHITE);
+
+                    createSpiral();
+                    break;
+                default:
+                    return false;
+            }
+
+            //Completes the drawing
+            invalidate();
         }
-
-        //Completes the drawing
-        invalidate();
-
         return true;
     }
 
@@ -239,8 +258,11 @@ public class SpiralView extends View {
         Float s = sum/size;
         int score = s.intValue();
         Log.v("score",Integer.toString(score));
-        xxx.runFromFragment(score);
+        xxx.runFromFragment(score, rightHand);
+        finishTest++;
+
         return score;
     }
+
 
 }

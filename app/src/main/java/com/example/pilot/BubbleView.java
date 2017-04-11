@@ -38,7 +38,6 @@ public class BubbleView extends View {
         num = -1;
         num2 = -1;
         host = (BubbleActivity) getContext();
-
     }
 
     protected void onDraw(Canvas canvas){
@@ -66,22 +65,12 @@ public class BubbleView extends View {
         }else{
             Log.v("avgTime", Double.toString(averageTime) + " seconds");
             BubbleActivity.textView.setText("Average reaction time: " + averageTime +" seconds");
-
-
+            //change this to be left and right hand
+            host.sendResultToSheet(averageTime,averageTime);
         }
     }
 
-//    private void sendToSheets() {
-//        Intent sheets = new Intent(getContext(), Sheets.class);
-//        String myUserId = "t01p01";
-//
-//
-//        sheets.putExtra(Sheets.EXTRA_TYPE, Sheets.UpdateType.LH_POP.ordinal());
-//        System.out.println("LHPOP");
-//        sheets.putExtra(Sheets.EXTRA_USER, myUserId);
-//        sheets.putExtra(Sheets.EXTRA_VALUE, averageTime);
-//    }
-
+    //comment 
     private double getCurrentCircleX(){
         return circleX;
     }

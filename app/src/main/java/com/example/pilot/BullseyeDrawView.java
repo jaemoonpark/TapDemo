@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.AttributeSet;
@@ -88,8 +89,14 @@ public class BullseyeDrawView extends View {
         canvas.drawPath(tracePath, paint);
     }
 
+    public void resetCanvas(){
+        paint.setColor(Color.BLUE);
+
+    }
+
     public void setPaintColor() {
         paint.setColor(Color.GREEN);
     }
+
 
 }
