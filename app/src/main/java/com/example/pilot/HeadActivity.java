@@ -46,6 +46,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     private MediaPlayer testComplete;
     private CMSC436Sheet sheet;
 
+    private int trials = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +63,9 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
         dThreshold = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
         getMidpoint = true;
 
-        startTest = MediaPlayer.create(this,  R.raw.start_test);
-        testComplete = MediaPlayer.create(this, R.raw.test_complete);
+
+
+
     }
 
     @Override
@@ -85,7 +87,7 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
 
 
 
-           headView.tracePath.lineTo(xDraw, yAxisCenter);
+            headView.tracePath.lineTo(xDraw, yAxisCenter);
             headView.invalidate();
         }
     }
@@ -135,51 +137,68 @@ public class HeadActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void startHeadTest(View view){
+
+        instructions.setVisibility(View.GONE);
+        button.setVisibility(View.GONE);
         float xCenter = (headView.getX() + headView.getWidth()) / 2;
         yAxisCenter = (headView.getY() + headView.getHeight()) / 2;
-
-        if(!testStarted) {
+        if (!testStarted) {
             testStarted = true;
             headView.tracePath.moveTo(xCenter, yAxisCenter);
-            instructions.setVisibility(View.GONE);
-            button.setVisibility(View.GONE);
             //Play start test sound byte
-            startTest.start();
-
-
-            while (startTest.isPlaying()){
-                 //Do nothing
-            }
-            startTest.release();
-
-            new CountDownTimer(10000, 500){
+            playStart();
+            new CountDownTimer(10000, 500) {
                 @Override
-                public void onTick(long millisUntilFinished){
+                public void onTick(long millisUntilFinished) {
                     double distance = getDistanceFromCenter(xDraw, yAxisCenter);
                     distancesArray.add(distance);
-
                 }
-
                 @Override
                 public void onFinish() {
                     //Play test complete sound
-                    testComplete.start();
-
-                    while(testComplete.isPlaying()){
-                        //Do nothing
-                    }
-                    testComplete.release();
+                    playEnd();
                     testStarted = false;
                     score = getScore(distancesArray);
                     System.out.println(score);
-
+                    trials++;
+                    Thread.yield();
+                    try{
+                        Thread.sleep(5000);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
 
                 }
             }.start();
-        }
 
+        }
     }
 
+    private void playEnd(){
+        if(testComplete == null) {
+            testComplete = MediaPlayer.create(this, R.raw.test_complete);
+            testComplete.start();
+            while (testComplete.isPlaying()) {
+
+            }
+            testComplete.reset();
+            testComplete.release();
+            testComplete = null;
+        }
+    }
+
+    private void playStart(){
+        if(startTest == null) {
+            startTest = MediaPlayer.create(this, R.raw.start_test);
+            startTest.start();
+            while (startTest.isPlaying()) {
+
+            }
+            startTest.reset();
+            startTest.release();
+            startTest = null;
+        }
+    }
     private void sendResultToSheet(){
         //there is not implementation for head yet
       ///  sheet = new CMSC436Sheet(this, getString(R.string.app_name), getString(R.string.CMSC436Sheet_spreadsheet_id));
