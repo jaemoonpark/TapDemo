@@ -93,4 +93,17 @@
         android:text="@string/arm"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button7"
+        android:onClick="walkTest"
+        android:text="Walk Test"
+        android:layout_below= "@+id/button6"
+        android:layout_marginTop="26dp"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:background="@android:color/holo_orange_light"
+        android:layout_alignParentEnd="true"
+        />
+
 </RelativeLayout>

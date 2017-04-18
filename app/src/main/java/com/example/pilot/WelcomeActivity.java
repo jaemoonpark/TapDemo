@@ -72,4 +72,9 @@ public class WelcomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, HeadActivity.class);
         startActivity(intent);
     }
+
+    public void walkTest(View view){
+        Intent intent = new Intent(this, WalkActivity.class);
+        startActivity(intent);
+    }
 }
