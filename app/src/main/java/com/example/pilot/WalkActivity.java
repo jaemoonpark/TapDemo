@@ -25,6 +25,7 @@ public class WalkActivity extends AppCompatActivity {
 
         //on start test
         startTime = System.currentTimeMillis();
+        System.out.println(startTime);
 
         //on stop test
         stopTime = System.currentTimeMillis();
