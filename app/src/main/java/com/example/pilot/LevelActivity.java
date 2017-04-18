@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import cmsc436.tharri16.googlesheetshelper.CMSC436Sheet;
@@ -156,9 +157,10 @@ public class LevelActivity extends AppCompatActivity implements SensorEventListe
                     public void onFinish() {
                         testStarted = false;
                         double finishScore = getScore(distancesArray);
+                        DecimalFormat dformat = new DecimalFormat("#.#");
                         System.out.println(finishScore);
 
-                        scoreView.setText("Score: " + finishScore);
+                        scoreView.setText("Score: " + dformat.format(finishScore));
                         sendResultToSheet();
                         didFinish++;
                         scoreView.setVisibility(View.VISIBLE);

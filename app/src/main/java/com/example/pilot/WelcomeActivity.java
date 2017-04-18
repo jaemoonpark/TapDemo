@@ -1,5 +1,4 @@
 package com.example.pilot;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -71,6 +70,11 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public void headTest(View v) {
         Intent intent = new Intent(this, HeadActivity.class);
+        startActivity(intent);
+    }
+
+    public void walkTest(View view){
+        Intent intent = new Intent(this, WalkActivity.class);
         startActivity(intent);
     }
 }

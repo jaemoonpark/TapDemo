@@ -43,4 +43,5 @@ dependencies {
         exclude group: 'com.google.code.findbugs'
     }
     compile project(':googlesheetshelper-1.2.2-release')
+
 }
